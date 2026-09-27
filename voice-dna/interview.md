@@ -224,5 +224,14 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 
 ## Block 5 — Herkunft und Biografie
 
-_Das Interview laeuft auf 100 Fragen. Ab hier fortlaufend nummeriert._
+_Das Interview laeuft nach dem Taste-Interviewer-Protokoll: 100 Fragen, eine
+nach der anderen, Nachfassen bei vagen Antworten, am Ende ein vollstaendiges
+VOICE PROFILE in sieben Abschnitten (Beliefs & Contrarian Takes 15, Writing
+Mechanics 20, Aesthetic Crimes 15, Voice & Personality 15, Structural
+Preferences 15, Hard Nos 10, Red Flags 10) plus Quick Reference Card._
+
+_Stand: Fragen 1 bis 12 gestellt, 11 beantwortet (Frage 1 uebersprungen). Die
+Antworten stehen oben chronologisch; die Zuordnung zu den sieben Abschnitten
+erfolgt bei der Kompilierung. Dieser Block sammelt ab Frage 13 weiter._
+
 
