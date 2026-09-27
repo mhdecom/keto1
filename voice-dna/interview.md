@@ -170,9 +170,16 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > Keine uebertriebene Fachsprache aus dem medizinischen Sektor. Auch der Laie
 > soll es verstehen koennen.
 
-**3.3 Ein fremder Text, der klingt, wie du klingen willst. Und einer, der das Gegenteil ist.**
+**Frage 9 — Vorbilder im Klang, und das Gegenteil.**
 
-> _(offen)_
+> Ein Podcast, den ich mag, ist "Diary of a CEO". Eine Zeit lang auch der
+> Podcast von Tony Robbins. Aber ich moechte etwas serioeser klingen.
+>
+> Der Huberman-Podcast ist vielleicht ein bisschen zu steif, aber fuer das
+> Erklaeren von Studien ist er sehr gut.
+>
+> _(Diktat unsicher: "Sugarman" als Huberman gelesen; ein weiterer Titel kam als
+> "To Be Back Podcast" an und ist noch zu klaeren.)_
 
 ---
 
