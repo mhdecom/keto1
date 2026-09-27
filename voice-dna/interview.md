@@ -105,9 +105,22 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > es nur die, die schon sehr schwer krank sind. Den anderen wird es
 > vorenthalten.
 
-**2.2 Ein eigener Irrtum, den du oeffentlich erzaehlen wuerdest.**
+**Frage 5 — Ein eigener Irrtum, den du oeffentlich erzaehlen wuerdest.**
 
-> _(offen)_
+> Ich habe eine Zeit lang gedacht, dass Psychedelika Menschen fundamental
+> veraendern koennen, die Gesellschaft zum Guten veraendern koennen.
+> Letztendlich ein grosses Leid der Menschheit ueberwinden koennen, bei vielen
+> psychischen Erkrankungen, aber auch darueber hinaus. Eine Art Weltfrieden sei
+> damit moeglich. Das ist wahrscheinlich eine aehnliche Idee, wie sie die
+> 68er-Bewegung hatte. Das sehe ich heute als sehr naiv, und ich nehme es als
+> Irrtum an.
+>
+> Sicher auch bei der Keto-Ernaehrung. Es gibt Fallberichte, die eine
+> wahnsinnige Euphorie ausloesen koennen. Es ist eine Therapieform, die sehr
+> selbstbestimmt ist, man kann sie durch eine Lifestyle-Veraenderung machen.
+> Auch da muessen wir erst abwarten, inwieweit und welcher Patientengruppe sie
+> bei psychischen Erkrankungen wirklich hilft. Bei anderen Dingen, Diabetes,
+> wissen wir es schon sehr gut.
 
 **2.3 Was bei den Retreats immer wieder passiert, womit Aussenstehende nicht rechnen.**
 
