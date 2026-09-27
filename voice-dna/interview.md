@@ -19,9 +19,24 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 
 > _(offen)_
 
-**1.2 Welche Ueberzeugung vertrittst du, die dir unter Kollegen Widerspruch einbringt?**
+**Frage 2 — Welche Ueberzeugung vertrittst du, die dir unter Kollegen Widerspruch einbringt?**
 
-> _(offen)_
+> Viele Ansichten. Dass ketogene Therapie bei psychischen Erkrankungen helfen
+> kann, aber auch bei vielen anderen chronischen Erkrankungen. Und auch bei
+> Menschen, die nicht krank sind, als Praevention, immer mal wieder, oder
+> Fasten.
+>
+> Dass Psilocybin und die anderen Psychedelika nicht nur fuer Erkrankte sind.
+> Auch Gesunde koennen davon profitieren, sich selbst besser kennenlernen,
+> einen besseren Zugang zu Emotionen bekommen und Beziehungen besser fuehren.
+>
+> Dass man ein stressiges Leben, wie wir es in der modernen Gesellschaft haben
+> und das einfach nicht natuerlich ist, mit holistischen Dingen und Neurotech
+> abpuffern kann. Working Glasses, sehr helles Licht am Morgen mit der
+> Lichtbrille, Yoga und andere Habits in den Tag einbauen, einfach um sich
+> ausreichend zu bewegen.
+>
+> _(Antwort war am Ende abgeschnitten: "Ich glaube, ...")_
 
 **1.3 Was aergert dich an der Art, wie ueber Psychedelika, Ernaehrung oder maennliche Gesundheit geschrieben wird?**
 
