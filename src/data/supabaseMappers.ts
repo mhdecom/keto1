@@ -1,6 +1,9 @@
 import type {
+  AfterPlay,
   BackhandStyle,
   Gender,
+  Industry,
+  Interest,
   Intensity,
   Intent,
   InterclubLevel,
@@ -39,6 +42,10 @@ export interface PlayerRow {
   backhand: string;
   strengths: string[];
   weaknesses: string[];
+  profession: string;
+  industry: string;
+  interests: string[];
+  after_play: string[];
   availability: number;
   venue_ids: string[];
   intent: string;
@@ -106,6 +113,10 @@ export function rowToPlayer(row: PlayerRow): Player {
     backhand: row.backhand as BackhandStyle,
     strengths: (row.strengths ?? []) as Skill[],
     weaknesses: (row.weaknesses ?? []) as Skill[],
+    profession: row.profession ?? '',
+    industry: (row.industry as Industry) ?? 'other',
+    interests: (row.interests ?? []) as Interest[],
+    afterPlay: (row.after_play ?? []) as AfterPlay[],
     availability: row.availability,
     venueIds: row.venue_ids ?? [],
     intent: row.intent as Intent,
@@ -142,6 +153,10 @@ export function playerToRow(player: Player): Omit<PlayerRow, 'created_at'> {
     backhand: player.backhand,
     strengths: player.strengths,
     weaknesses: player.weaknesses,
+    profession: player.profession,
+    industry: player.industry,
+    interests: player.interests,
+    after_play: player.afterPlay,
     availability: player.availability,
     venue_ids: player.venueIds,
     intent: player.intent,

@@ -20,8 +20,11 @@ import {
   Title,
 } from '../../src/components/ui';
 import {
+  AFTER_PLAY_LABELS,
   BACKHAND_LABELS,
   FORMAT_LABELS,
+  INDUSTRY_LABELS,
+  INTEREST_LABELS,
   INTENSITY_LABELS,
   INTENT_LABELS,
   SKILL_LABELS,
@@ -67,6 +70,11 @@ export default function PlayerDetail() {
             <Body tone="soft">
               {ageFromBirthYear(player.birthYear)} Jahre · {player.neighbourhood}
             </Body>
+            {player.profession ? (
+              <Body tone="soft">
+                {player.profession} · {INDUSTRY_LABELS[player.industry]}
+              </Body>
+            ) : null}
             <Row gap={2} wrap>
               <Badge text={levelLabel(player.level)} tone="primary" />
               <Badge text={INTENT_LABELS[player.intent]} />
@@ -91,6 +99,7 @@ export default function PlayerDetail() {
             <ScoreBar label="Spielstärke" value={candidate.breakdown.level} />
             <ScoreBar label="Zeiten" value={candidate.breakdown.availability} />
             <ScoreBar label="Ort" value={candidate.breakdown.location} />
+            <ScoreBar label="Neben dem Platz" value={candidate.breakdown.affinity} />
             <ScoreBar label="Spielform" value={candidate.breakdown.format} />
             <ScoreBar label="Anspruch" value={candidate.breakdown.intensity} />
             <ScoreBar label="Belag" value={candidate.breakdown.surface} />
@@ -141,6 +150,40 @@ export default function PlayerDetail() {
             </Row>
           </Stack>
         ) : null}
+
+        <Stack gap={3}>
+          <Label>Neben dem Platz</Label>
+          {player.afterPlay.length === 0 ? (
+            <Body tone="soft">Will spielen, sonst nichts.</Body>
+          ) : (
+            <Row wrap gap={2}>
+              {player.afterPlay.map((item) => (
+                <Chip
+                  key={item}
+                  label={AFTER_PLAY_LABELS[item]}
+                  selected={candidate.offCourt.sharedAfterPlay.includes(item)}
+                  tone="positive"
+                />
+              ))}
+            </Row>
+          )}
+          {player.interests.length > 0 ? (
+            <Row wrap gap={2}>
+              {player.interests.map((item) => (
+                <Chip
+                  key={item}
+                  label={INTEREST_LABELS[item]}
+                  selected={candidate.offCourt.sharedInterests.includes(item)}
+                  tone="positive"
+                />
+              ))}
+            </Row>
+          ) : null}
+          {candidate.offCourt.sharedInterests.length > 0 ||
+          candidate.offCourt.sharedAfterPlay.length > 0 ? (
+            <Caption tone="muted">Hervorgehoben = habt ihr gemeinsam</Caption>
+          ) : null}
+        </Stack>
 
         <Stack gap={3}>
           <Label>Verfügbarkeit</Label>

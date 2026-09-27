@@ -2,6 +2,8 @@
 
 Native App (iOS + Android), um in Zürich Tennispartner zu finden, die zum
 eigenen Spiel passen — nach Spielstärke, Kalender und Anlage, nicht nach Foto.
+Und zu sehen, mit wem man sich da eigentlich trifft: Beruf, Interessen und ob
+danach noch ein Glas drinliegt.
 
 Plätze zu buchen ist in Zürich gelöst (GotCourts fährt die 40 Sandplätze des
 Sportamts). Jemanden zu finden, mit dem sich das Buchen lohnt, ist es nicht.
@@ -24,7 +26,7 @@ Auf dem Startbildschirm führt «Mit Demo-Profil ansehen» direkt ins Deck, ohne
 den Wizard auszufüllen.
 
 ```bash
-npm test           # 97 Unit-Tests (Vitest)
+npm test           # 116 Unit-Tests (Vitest)
 npm run typecheck  # tsc --noEmit
 ```
 
@@ -41,7 +43,7 @@ npm run typecheck  # tsc --noEmit
 
 ```
 app/                    Screens (expo-router, dateibasiertes Routing)
-  onboarding.tsx        Profil-Wizard in acht Schritten
+  onboarding.tsx        Profil-Wizard in neun Schritten
   (tabs)/               Entdecken · Anfragen · Matches · Profil
   match/[id].tsx        Chat samt Buchungs-Links für gemeinsame Anlagen
   player/[id].tsx       Vollprofil mit aufgeschlüsseltem Score
@@ -50,6 +52,8 @@ app/                    Screens (expo-router, dateibasiertes Routing)
 src/domain/             Reines TypeScript, keine RN- oder Supabase-Importe
   level.ts              Klassierung und Selbsteinschätzung → Stärkeskala 0–100
   availability.ts       Wochenraster als 21-Bit-Maske
+  affinity.ts           Beruf, Interessen, "nach dem Spiel" — eigene Achse,
+                        unabhängig von Geschlecht und Dating
   matching.ts           Gewichteter Score, harte Filter, Begründungen
   venues.ts             Die Zürcher Anlagen
   geo.ts                Haversine-Distanz
@@ -61,6 +65,7 @@ src/data/               Repository-Interface + zwei Implementierungen
 src/lib/courtProviders/ Austauschbare Adapter: GotCourts, Eversports, courts online
 src/components/         UI-Primitive, Wochenraster, Spielerkarte, Swipe-Deck
 supabase/migrations/    Schema inklusive Row-Level-Security
+                        0001 Basis · 0002 Beruf, Interessen, nach dem Spiel
 ```
 
 Die Domain-Schicht ist absichtlich frei von React Native und Supabase. Deshalb

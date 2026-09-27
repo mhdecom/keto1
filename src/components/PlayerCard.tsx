@@ -1,7 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { estimateLevel, levelLabel } from '../domain/level';
-import { INTENSITY_LABELS, SKILL_LABELS } from '../domain/labels';
+import {
+  AFTER_PLAY_LABELS,
+  INDUSTRY_LABELS,
+  INTENSITY_LABELS,
+  INTEREST_LABELS,
+  SKILL_LABELS,
+} from '../domain/labels';
 import { ageFromBirthYear, scoreToPercent, type MatchCandidate } from '../domain/matching';
 import { venueName } from '../domain/venues';
 import { useTheme } from '../theme';
@@ -10,6 +16,7 @@ import { Avatar, Badge, Body, Caption, Chip, Label, Row, Title } from './ui';
 /** Keeps a dense profile from overflowing a card on a small phone. */
 const MAX_SKILLS = 3;
 const MAX_VENUES = 4;
+const MAX_INTERESTS = 5;
 
 /**
  * The swipe card. It shows *why* the candidate was surfaced, not just who they
@@ -23,6 +30,12 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
   const level = estimateLevel(player.level);
   const strengths = player.strengths.slice(0, MAX_SKILLS);
   const weaknesses = player.weaknesses.slice(0, MAX_SKILLS);
+
+  // Shared interests first: the reason to look at this block at all is to see
+  // what you have in common, not to read a list in alphabetical order.
+  const shared = player.interests.filter((item) => candidate.offCourt.sharedInterests.includes(item));
+  const rest = player.interests.filter((item) => !candidate.offCourt.sharedInterests.includes(item));
+  const interests = [...shared, ...rest].slice(0, MAX_INTERESTS);
 
   return (
     <View
@@ -58,6 +71,11 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
             {' · '}
             {INTENSITY_LABELS[player.intensity]}
           </Caption>
+          {player.profession ? (
+            <Caption tone="soft">
+              {player.profession} · {INDUSTRY_LABELS[player.industry]}
+            </Caption>
+          ) : null}
         </View>
         <View style={{ alignItems: 'flex-end', gap: theme.spacing(1) }}>
           <View
@@ -108,6 +126,30 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
               ))}
               {weaknesses.map((skill) => (
                 <Chip key={`w-${skill}`} label={`− ${SKILL_LABELS[skill]}`} selected tone="negative" />
+              ))}
+            </Row>
+          </View>
+        ) : null}
+
+        {interests.length > 0 || player.afterPlay.length > 0 ? (
+          <View style={{ gap: theme.spacing(2) }}>
+            <Label>Neben dem Platz</Label>
+            <Row wrap gap={2}>
+              {player.afterPlay.map((item) => (
+                <Chip
+                  key={item}
+                  label={AFTER_PLAY_LABELS[item]}
+                  selected={candidate.offCourt.sharedAfterPlay.includes(item)}
+                  tone="positive"
+                />
+              ))}
+              {interests.map((item) => (
+                <Chip
+                  key={item}
+                  label={INTEREST_LABELS[item]}
+                  selected={candidate.offCourt.sharedInterests.includes(item)}
+                  tone="positive"
+                />
               ))}
             </Row>
           </View>

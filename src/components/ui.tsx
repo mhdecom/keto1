@@ -336,6 +336,9 @@ export function Chip({
         paddingHorizontal: theme.spacing(3.5),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: selected ? 'transparent' : theme.colors.border,
+        // A chip that is wider than its row must wrap its label rather than
+        // run off the edge of the card.
+        flexShrink: 1,
       }}
     >
       <Text style={{ color: foreground, fontSize: theme.font.small, fontWeight: selected ? '700' : '500' }}>

@@ -23,11 +23,17 @@ import {
 import { backendName } from '../../src/data';
 import { DISTRICT_OPTIONS } from '../../src/domain/districts';
 import {
+  AFTER_PLAY_LABELS,
+  AFTER_PLAY_OPTIONS,
   FORMAT_OPTIONS,
+  INDUSTRY_LABELS,
+  INDUSTRY_OPTIONS,
   INTENSITY_OPTIONS,
   INTENT_HINTS,
   INTENT_OPTIONS,
   INTERCLUB_OPTIONS,
+  INTEREST_LABELS,
+  INTEREST_OPTIONS,
   RALLY_OPTIONS,
   SEEKING_OPTIONS,
   SKILL_OPTIONS,
@@ -115,6 +121,11 @@ export default function Profile() {
               <Body tone="soft">
                 {ageFromBirthYear(me.birthYear)} Jahre · {me.neighbourhood}
               </Body>
+              {me.profession ? (
+                <Body tone="soft">
+                  {me.profession} · {INDUSTRY_LABELS[me.industry]}
+                </Body>
+              ) : null}
               <Row gap={2} wrap>
                 <Badge text={levelLabel(me.level)} tone="primary" />
                 <Badge text={`${me.radiusKm} km`} />
@@ -130,6 +141,20 @@ export default function Profile() {
               <Body>{INTENT_HINTS[me.intent]}</Body>
             </Stack>
           </Card>
+
+          {me.interests.length > 0 || me.afterPlay.length > 0 ? (
+            <Stack gap={3}>
+              <Label>Neben dem Platz</Label>
+              <Row wrap gap={2}>
+                {me.afterPlay.map((item) => (
+                  <Chip key={item} label={AFTER_PLAY_LABELS[item]} selected />
+                ))}
+                {me.interests.map((item) => (
+                  <Chip key={item} label={INTEREST_LABELS[item]} />
+                ))}
+              </Row>
+            </Stack>
+          ) : null}
 
           <Stack gap={3}>
             <Label>Deine Zeiten</Label>
@@ -301,6 +326,48 @@ export default function Profile() {
             tone="negative"
             onChange={(weaknesses) => patch({ weaknesses })}
           />
+        </Stack>
+
+        <Stack gap={2}>
+          <Label>Beruf</Label>
+          <Input
+            value={form.profession}
+            onChangeText={(profession) => patch({ profession })}
+            placeholder="Software Engineer"
+            maxLength={80}
+          />
+        </Stack>
+
+        <Stack gap={2}>
+          <Label>Branche</Label>
+          <ChoiceGroup
+            options={INDUSTRY_OPTIONS}
+            value={[form.industry]}
+            onChange={([industry]) => industry && patch({ industry })}
+          />
+        </Stack>
+
+        <Stack gap={2}>
+          <Label>Interessen</Label>
+          <ChoiceGroup
+            options={INTEREST_OPTIONS}
+            value={form.interests}
+            multiple
+            onChange={(interests) => patch({ interests })}
+          />
+        </Stack>
+
+        <Stack gap={2}>
+          <Label>Nach dem Spiel</Label>
+          <ChoiceGroup
+            options={AFTER_PLAY_OPTIONS}
+            value={form.afterPlay}
+            multiple
+            onChange={(afterPlay) => patch({ afterPlay })}
+          />
+          {form.afterPlay.length === 0 ? (
+            <Caption tone="soft">Nichts ausgewählt heisst: du kommst zum Spielen.</Caption>
+          ) : null}
         </Stack>
 
         <Stack gap={2}>

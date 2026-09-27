@@ -1,5 +1,7 @@
+import { affinity, type AffinityResult } from './affinity';
 import { availabilityCompatibility, describeSharedSlots, sharedSlots } from './availability';
 import { distanceKm, proximityScore } from './geo';
+import { AFTER_PLAY_LABELS, INDUSTRY_LABELS, INTEREST_LABELS } from './labels';
 import { estimateLevel, levelCompatibility, levelLabel } from './level';
 import { INTENSITIES, type Intensity, type Player, type Surface } from './types';
 
@@ -8,14 +10,25 @@ import { INTENSITIES, type Intensity, type Player, type Surface } from './types'
  * they are the two reasons a tennis pairing actually fails in practice: a
  * mismatched level makes the hit pointless, and a mismatched calendar means it
  * never happens at all. Everything else is preference.
+ *
+ * `affinity` covers everything off the court — profession, interests, and what
+ * each side wants after the match. It is weighted below the three tennis
+ * fundamentals but above the remaining preferences, because a good contact you
+ * cannot actually play with is still not a tennis partner, while a decent hit
+ * with someone worth staying for is the thing this app exists to produce.
+ *
+ * Note that affinity scores a perfect 1 when *neither* side wants anything
+ * beyond the court: two people who just want to hit balls agree completely, so
+ * their interests never get weighed against them.
  */
 export const MATCH_WEIGHTS = {
-  level: 0.32,
-  availability: 0.24,
-  location: 0.18,
-  format: 0.12,
-  intensity: 0.08,
-  surface: 0.06,
+  level: 0.28,
+  availability: 0.22,
+  location: 0.16,
+  affinity: 0.12,
+  format: 0.1,
+  intensity: 0.07,
+  surface: 0.05,
 } as const;
 
 export type MatchFactor = keyof typeof MATCH_WEIGHTS;
@@ -24,6 +37,7 @@ export interface ScoreBreakdown {
   level: number;
   availability: number;
   location: number;
+  affinity: number;
   format: number;
   intensity: number;
   surface: number;
@@ -37,6 +51,8 @@ export interface MatchCandidate {
   distanceKm: number;
   sharedVenueIds: string[];
   sharedSlotCount: number;
+  /** Everything off the court: interests, profession, what happens afterwards. */
+  offCourt: AffinityResult;
   /** Short, human readable justifications shown on the card. */
   reasons: string[];
   /** The one thing that fits worst, shown so the score is not a black box. */
@@ -92,6 +108,7 @@ const FACTOR_LABELS: Record<MatchFactor, string> = {
   level: 'Spielstärke',
   availability: 'Zeiten',
   location: 'Ort',
+  affinity: 'Neben dem Platz',
   format: 'Spielform',
   intensity: 'Anspruch',
   surface: 'Belag',
@@ -111,10 +128,13 @@ export function scoreCandidate(
   venueNames: Record<string, string> = {},
   now = new Date(),
 ): MatchCandidate {
+  const offCourt = affinity(viewer, other);
+
   const breakdown: ScoreBreakdown = {
     level: levelCompatibility(viewer.level, other.level),
     availability: availabilityCompatibility(viewer.availability, other.availability),
     location: 0,
+    affinity: offCourt.score,
     format: overlapRatio(viewer.formats, other.formats, 0.3),
     intensity: intensityCompatibility(viewer.intensity, other.intensity),
     surface: surfaceCompatibility(viewer.surfaces, other.surfaces),
@@ -168,6 +188,21 @@ export function scoreCandidate(
     reasons.push(`Nur ${km < 1 ? '<1' : km.toFixed(1)} km entfernt`);
   }
 
+  // Off-court reasons come before the play formats: knowing you both ski, or
+  // both work in pharma, is what turns a hitting partner into a contact.
+  if (offCourt.sameIndustry) {
+    reasons.push(`Beide in ${INDUSTRY_LABELS[other.industry]}`);
+  } else if (offCourt.sharedInterests.length >= 2) {
+    // One example only: naming two blows past the width of a card chip, and
+    // the exact list is one tap away on the full profile anyway.
+    const example = INTEREST_LABELS[offCourt.sharedInterests[0]];
+    reasons.push(`${offCourt.sharedInterests.length} gemeinsame Interessen (${example})`);
+  } else if (offCourt.sharedInterests.length === 1) {
+    reasons.push(`Beide: ${INTEREST_LABELS[offCourt.sharedInterests[0]]}`);
+  } else if (offCourt.sharedAfterPlay.length > 0) {
+    reasons.push(`Beide offen für ${AFTER_PLAY_LABELS[offCourt.sharedAfterPlay[0]]}`);
+  }
+
   const sharedFormats = viewer.formats.filter((format) => other.formats.includes(format));
   if (sharedFormats.length > 0) {
     reasons.push(sharedFormats.map((format) => FORMAT_LABELS[format] ?? format).join(' · '));
@@ -178,7 +213,14 @@ export function scoreCandidate(
   const weakest = (Object.keys(MATCH_WEIGHTS) as MatchFactor[])
     .filter((factor) => breakdown[factor] < 0.4)
     .sort((a, b) => MATCH_WEIGHTS[b] * (1 - breakdown[b]) - MATCH_WEIGHTS[a] * (1 - breakdown[a]))[0];
-  if (weakest) {
+  if (weakest === 'affinity' && offCourt.mismatched) {
+    // Generic wording would be misleading here: nothing is wrong with either
+    // profile, the two just want different amounts of contact.
+    caveat =
+      other.afterPlay.length > 0
+        ? `${other.firstName} sucht mehr als nur Tennis`
+        : `${other.firstName} will nur spielen`;
+  } else if (weakest) {
     caveat = `${FACTOR_LABELS[weakest]} passt weniger gut`;
   }
 
@@ -189,6 +231,7 @@ export function scoreCandidate(
     distanceKm: km,
     sharedVenueIds,
     sharedSlotCount: slotCount,
+    offCourt,
     reasons: reasons.slice(0, 4),
     caveat,
     datingEnabled: viewer.intent === 'openToDating' && other.intent === 'openToDating',

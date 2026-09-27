@@ -96,6 +96,77 @@ export const BACKHAND_STYLES = ['oneHanded', 'twoHanded'] as const;
 export type BackhandStyle = (typeof BACKHAND_STYLES)[number];
 
 // ---------------------------------------------------------------------------
+// Off-court: profession, interests, and what happens after the match
+//
+// This is a separate axis from `Intent` on purpose. Wanting a drink or a
+// professional conversation after playing has nothing to do with dating, and
+// it is just as relevant between two men or two women as it is between a man
+// and a woman. Folding it into the romantic intent would have made the most
+// useful part of the network invisible to most of its users.
+// ---------------------------------------------------------------------------
+
+export const INDUSTRIES = [
+  'tech',
+  'finance',
+  'health',
+  'pharma',
+  'science',
+  'law',
+  'consulting',
+  'marketing',
+  'education',
+  'engineering',
+  'creative',
+  'publicSector',
+  'hospitality',
+  'trades',
+  'retail',
+  'entrepreneur',
+  'student',
+  'retired',
+  'other',
+] as const;
+export type Industry = (typeof INDUSTRIES)[number];
+
+export const INTERESTS = [
+  'food',
+  'wine',
+  'travel',
+  'music',
+  'art',
+  'film',
+  'books',
+  'theatre',
+  'photography',
+  'running',
+  'skiing',
+  'hiking',
+  'cycling',
+  'swimming',
+  'fitness',
+  'yoga',
+  'startups',
+  'investing',
+  'technology',
+  'science',
+  'politics',
+  'languages',
+  'family',
+  'pets',
+  'gaming',
+  'volunteering',
+] as const;
+export type Interest = (typeof INTERESTS)[number];
+
+/**
+ * What someone is open to once the court time is over. An empty list means
+ * "just tennis" — which is a perfectly good answer and must never read as a
+ * deficiency in the UI.
+ */
+export const AFTER_PLAY = ['drink', 'meal', 'networking'] as const;
+export type AfterPlay = (typeof AFTER_PLAY)[number];
+
+// ---------------------------------------------------------------------------
 // Intent (this is what separates "find a hitting partner" from dating)
 // ---------------------------------------------------------------------------
 
@@ -174,6 +245,13 @@ export interface Player {
   backhand: BackhandStyle;
   strengths: Skill[];
   weaknesses: Skill[];
+
+  /** Free-text job title, e.g. "Oberärztin Neurologie". Display only. */
+  profession: string;
+  industry: Industry;
+  interests: Interest[];
+  /** Empty means "just tennis". */
+  afterPlay: AfterPlay[];
 
   availability: AvailabilityMask;
   venueIds: string[];

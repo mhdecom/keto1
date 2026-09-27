@@ -1,6 +1,9 @@
 import {
+  AFTER_PLAY,
   BACKHAND_STYLES,
   GENDERS,
+  INDUSTRIES,
+  INTERESTS,
   INTENSITIES,
   INTENTS,
   INTERCLUB_LEVELS,
@@ -8,8 +11,11 @@ import {
   RALLY_CONSISTENCY,
   SKILLS,
   SURFACES,
+  type AfterPlay,
   type BackhandStyle,
   type Gender,
+  type Industry,
+  type Interest,
   type Intensity,
   type Intent,
   type InterclubLevel,
@@ -88,6 +94,69 @@ export const INTENT_HINTS: Record<Intent, string> = {
   competitionOnly: 'Du willst Matches zählen, Ranglisten spielen, ernsthaft trainieren.',
 };
 
+export const INDUSTRY_LABELS: Record<Industry, string> = {
+  tech: 'IT & Software',
+  finance: 'Finanzen & Versicherung',
+  health: 'Gesundheit & Medizin',
+  pharma: 'Pharma & Life Sciences',
+  science: 'Forschung & Wissenschaft',
+  law: 'Recht',
+  consulting: 'Beratung',
+  marketing: 'Marketing & Kommunikation',
+  education: 'Bildung',
+  engineering: 'Ingenieurwesen & Bau',
+  creative: 'Kreativ & Design',
+  publicSector: 'Öffentlicher Dienst',
+  hospitality: 'Gastronomie & Hotellerie',
+  trades: 'Handwerk & Gewerbe',
+  retail: 'Handel & Verkauf',
+  entrepreneur: 'Selbstständig & Startup',
+  student: 'Studium',
+  retired: 'Pensioniert',
+  other: 'Anderes',
+};
+
+export const INTEREST_LABELS: Record<Interest, string> = {
+  food: 'Essen & Kochen',
+  wine: 'Wein & Apéro',
+  travel: 'Reisen',
+  music: 'Musik & Konzerte',
+  art: 'Kunst & Museen',
+  film: 'Film & Serien',
+  books: 'Lesen',
+  theatre: 'Theater & Bühne',
+  photography: 'Fotografie',
+  running: 'Laufen',
+  skiing: 'Ski & Snowboard',
+  hiking: 'Wandern & Berge',
+  cycling: 'Velo',
+  swimming: 'Schwimmen & See',
+  fitness: 'Kraft & Fitness',
+  yoga: 'Yoga & Meditation',
+  startups: 'Startups & Unternehmertum',
+  investing: 'Anlegen & Märkte',
+  technology: 'Technologie & KI',
+  science: 'Wissenschaft',
+  politics: 'Politik & Gesellschaft',
+  languages: 'Sprachen',
+  family: 'Familie',
+  pets: 'Hunde & Tiere',
+  gaming: 'Gaming',
+  volunteering: 'Ehrenamt',
+};
+
+export const AFTER_PLAY_LABELS: Record<AfterPlay, string> = {
+  drink: 'Apéro danach',
+  meal: 'Zusammen essen',
+  networking: 'Beruflicher Austausch',
+};
+
+export const AFTER_PLAY_HINTS: Record<AfterPlay, string> = {
+  drink: 'Nach dem Spiel noch etwas trinken.',
+  meal: 'Auch mal zusammen essen gehen.',
+  networking: 'Offen dafür, dass beruflich etwas daraus entsteht.',
+};
+
 export const GENDER_LABELS: Record<Gender, string> = {
   female: 'Frau',
   male: 'Mann',
@@ -113,4 +182,7 @@ export const RALLY_OPTIONS = options(RALLY_CONSISTENCY, RALLY_LABELS);
 export const INTERCLUB_OPTIONS = options(INTERCLUB_LEVELS, INTERCLUB_LABELS);
 export const INTENT_OPTIONS = options(INTENTS, INTENT_LABELS);
 export const GENDER_OPTIONS = options(GENDERS, GENDER_LABELS);
+export const INDUSTRY_OPTIONS = options(INDUSTRIES, INDUSTRY_LABELS);
+export const INTEREST_OPTIONS = options(INTERESTS, INTEREST_LABELS);
+export const AFTER_PLAY_OPTIONS = options(AFTER_PLAY, AFTER_PLAY_LABELS);
 export const SEEKING_OPTIONS = options(GENDERS, SEEKING_LABELS);

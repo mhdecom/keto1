@@ -1,8 +1,11 @@
 import { districtById, districtIdForCoordinates } from '../domain/districts';
 import type {
+  AfterPlay,
   AvailabilityMask,
   BackhandStyle,
   Gender,
+  Industry,
+  Interest,
   Intensity,
   Intent,
   InterclubLevel,
@@ -42,6 +45,11 @@ export interface ProfileForm {
   strengths: Skill[];
   weaknesses: Skill[];
 
+  profession: string;
+  industry: Industry;
+  interests: Interest[];
+  afterPlay: AfterPlay[];
+
   availability: AvailabilityMask;
   venueIds: string[];
 
@@ -73,6 +81,11 @@ export const EMPTY_FORM: ProfileForm = {
   backhand: 'twoHanded',
   strengths: [],
   weaknesses: [],
+
+  profession: '',
+  industry: 'other',
+  interests: [],
+  afterPlay: [],
 
   availability: 0,
   venueIds: [],
@@ -106,6 +119,11 @@ export function formFromPlayer(player: Player): ProfileForm {
     backhand: player.backhand,
     strengths: player.strengths,
     weaknesses: player.weaknesses,
+
+    profession: player.profession,
+    industry: player.industry,
+    interests: player.interests,
+    afterPlay: player.afterPlay,
 
     availability: player.availability,
     venueIds: player.venueIds,
@@ -198,6 +216,10 @@ export function playerFromForm(
     backhand: form.backhand,
     strengths: form.strengths,
     weaknesses: form.weaknesses,
+    profession: form.profession.trim(),
+    industry: form.industry,
+    interests: form.interests,
+    afterPlay: form.afterPlay,
     availability: form.availability,
     venueIds: form.venueIds,
     intent: form.intent,

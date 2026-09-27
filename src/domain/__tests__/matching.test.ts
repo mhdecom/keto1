@@ -39,6 +39,12 @@ function makePlayer(overrides: Partial<Player> = {}): Player {
     backhand: 'twoHanded',
     strengths: [],
     weaknesses: [],
+    profession: '',
+    industry: 'other',
+    interests: [],
+    // Empty by default: two players who both want only tennis agree perfectly,
+    // so affinity stays neutral for the tests that are about tennis.
+    afterPlay: [],
     availability: maskFrom([[1, 'evening']]),
     venueIds: ['mythenquai'],
     intent: 'tennisOnly',
@@ -216,6 +222,101 @@ describe('buildDeck', () => {
   it('never shows a woman seeking only women to a male viewer', () => {
     const deck = buildDeck(DEMO_ME, SEED_PLAYERS, { venueNames: VENUE_NAMES, now: NOW, minScore: 0 });
     expect(deck.map((c) => c.player.id)).not.toContain('p-miriam');
+  });
+});
+
+describe('off-court affinity in the score', () => {
+  it('surfaces a shared industry as a reason when both want to network', () => {
+    const viewer = makePlayer({
+      id: 'viewer',
+      industry: 'health',
+      afterPlay: ['networking'],
+    });
+    const other = makePlayer({
+      id: 'other',
+      industry: 'health',
+      afterPlay: ['networking'],
+    });
+    const result = scoreCandidate(viewer, other, VENUE_NAMES, NOW);
+    expect(result.offCourt.sameIndustry).toBe(true);
+    expect(result.reasons.join(' ')).toContain('Gesundheit');
+  });
+
+  it('names shared interests on the card', () => {
+    const viewer = makePlayer({ id: 'viewer', interests: ['skiing', 'wine'], afterPlay: ['drink'] });
+    const other = makePlayer({ id: 'other', interests: ['skiing', 'wine'], afterPlay: ['drink'] });
+    const result = scoreCandidate(viewer, other, VENUE_NAMES, NOW);
+    expect(result.reasons.join(' ')).toContain('2 gemeinsame Interessen');
+    expect(result.reasons.join(' ')).toContain('Ski');
+  });
+
+  it('phrases a single shared interest in the singular', () => {
+    const viewer = makePlayer({ id: 'viewer', interests: ['hiking'], afterPlay: ['drink'] });
+    const other = makePlayer({ id: 'other', interests: ['hiking', 'gaming'], afterPlay: ['drink'] });
+    const result = scoreCandidate(viewer, other, VENUE_NAMES, NOW);
+    expect(result.reasons.join(' ')).toContain('Beide: Wandern');
+  });
+
+  it('falls back to the shared after-play intent when interests do not overlap', () => {
+    const viewer = makePlayer({ id: 'viewer', interests: ['gaming'], afterPlay: ['drink'] });
+    const other = makePlayer({ id: 'other', interests: ['yoga'], afterPlay: ['drink'] });
+    const result = scoreCandidate(viewer, other, VENUE_NAMES, NOW);
+    expect(result.reasons.join(' ')).toContain('Apéro danach');
+  });
+
+  it('says nothing off-court when both only want to play', () => {
+    const result = scoreCandidate(makePlayer({ id: 'v' }), makePlayer({ id: 'o' }), VENUE_NAMES, NOW);
+    expect(result.offCourt.courtOnly).toBe(true);
+    expect(result.reasons.join(' ')).not.toMatch(/Interessen|Apéro|Beide in/);
+    // And it costs them nothing.
+    expect(result.breakdown.affinity).toBe(1);
+  });
+
+  it('explains an expectation mismatch by name instead of generically', () => {
+    const viewer = makePlayer({ id: 'viewer', firstName: 'Max', afterPlay: ['drink'] });
+    const other = makePlayer({ id: 'other', firstName: 'Tobias', afterPlay: [] });
+    const result = scoreCandidate(viewer, other, VENUE_NAMES, NOW);
+    expect(result.offCourt.mismatched).toBe(true);
+    expect(result.caveat).toBe('Tobias will nur spielen');
+  });
+
+  it('ranks a shared-interest partner above an otherwise identical stranger', () => {
+    const viewer = makePlayer({
+      id: 'viewer',
+      interests: ['skiing', 'wine', 'travel'],
+      afterPlay: ['drink'],
+    });
+    const congenial = makePlayer({
+      id: 'congenial',
+      interests: ['skiing', 'wine', 'travel'],
+      afterPlay: ['drink'],
+    });
+    const stranger = makePlayer({
+      id: 'stranger',
+      interests: ['gaming', 'politics', 'pets'],
+      afterPlay: ['drink'],
+    });
+    const a = scoreCandidate(viewer, congenial, VENUE_NAMES, NOW);
+    const b = scoreCandidate(viewer, stranger, VENUE_NAMES, NOW);
+    expect(a.score).toBeGreaterThan(b.score);
+    // But interests must not outweigh the tennis: the gap stays modest.
+    expect(a.score - b.score).toBeLessThan(MATCH_WEIGHTS.affinity);
+  });
+
+  it('never lets affinity outrank a matching level', () => {
+    const viewer = makePlayer({ id: 'viewer', interests: ['skiing'], afterPlay: ['drink'] });
+    // Same level, nothing in common off court.
+    const rightLevel = makePlayer({ id: 'level', interests: ['gaming'], afterPlay: ['drink'] });
+    // Three classes apart, but a soulmate off court.
+    const rightPerson = makePlayer({
+      id: 'person',
+      level: { ...viewer.level, classification: 'R3' },
+      interests: ['skiing'],
+      afterPlay: ['drink'],
+    });
+    expect(scoreCandidate(viewer, rightLevel, VENUE_NAMES, NOW).score).toBeGreaterThan(
+      scoreCandidate(viewer, rightPerson, VENUE_NAMES, NOW).score,
+    );
   });
 });
 

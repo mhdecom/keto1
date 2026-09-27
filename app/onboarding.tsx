@@ -21,13 +21,17 @@ import {
 import { DEMO_ME } from '../src/data/seed';
 import { DISTRICT_OPTIONS } from '../src/domain/districts';
 import {
+  AFTER_PLAY_HINTS,
+  AFTER_PLAY_OPTIONS,
   BACKHAND_OPTIONS,
   FORMAT_OPTIONS,
   GENDER_OPTIONS,
   INTENSITY_OPTIONS,
   INTENT_HINTS,
   INTENT_OPTIONS,
+  INDUSTRY_OPTIONS,
   INTERCLUB_OPTIONS,
+  INTEREST_OPTIONS,
   RALLY_OPTIONS,
   SEEKING_OPTIONS,
   SKILL_OPTIONS,
@@ -75,6 +79,12 @@ const STEPS: Step[] = [
     subtitle: 'Der häufigste Grund, warum eine Partnersuche scheitert, ist der Kalender.',
   },
   { id: 'venues', title: 'Wo spielst du?', subtitle: 'Anlagen, auf die du regelmässig gehst.' },
+  {
+    id: 'offCourt',
+    title: 'Neben dem Platz',
+    subtitle:
+      'Wer regelmässig mit dir spielt, verbringt viele Stunden mit dir. Das hier entscheidet, ob daraus ein Kontakt wird.',
+  },
   { id: 'intent', title: 'Was suchst du?', subtitle: 'Hier trennt sich Partnersuche von Dating.' },
   { id: 'bio', title: 'Ein Satz zu dir', subtitle: 'Was jemand wissen sollte, bevor er anfragt.' },
 ];
@@ -423,6 +433,69 @@ export default function Onboarding() {
             <Caption tone="muted">
               Eine gemeinsame Anlage ist Gold: sie macht aus «wir müssten mal» ein «Platz frei in
               einer Stunde?». Wenn du flexibel bist, lass es leer.
+            </Caption>
+          </Stack>
+        ) : null}
+
+        {step.id === 'offCourt' ? (
+          <Stack gap={5}>
+            <Stack gap={2}>
+              <Label>Was machst du beruflich?</Label>
+              <Input
+                value={form.profession}
+                onChangeText={(profession) => patch({ profession })}
+                placeholder="Software Engineer"
+                maxLength={80}
+              />
+            </Stack>
+
+            <Stack gap={2}>
+              <Label>Branche</Label>
+              <ChoiceGroup
+                options={INDUSTRY_OPTIONS}
+                value={[form.industry]}
+                onChange={([industry]) => industry && patch({ industry })}
+              />
+            </Stack>
+
+            <Stack gap={2}>
+              <Label>Interessen</Label>
+              <ChoiceGroup
+                options={INTEREST_OPTIONS}
+                value={form.interests}
+                multiple
+                onChange={(interests) => patch({ interests })}
+              />
+            </Stack>
+
+            <Stack gap={2}>
+              <Label>Nach dem Spiel</Label>
+              <ChoiceGroup
+                options={AFTER_PLAY_OPTIONS}
+                value={form.afterPlay}
+                multiple
+                onChange={(afterPlay) => patch({ afterPlay })}
+              />
+              {form.afterPlay.length === 0 ? (
+                <Caption tone="soft">
+                  Nichts ausgewählt heisst: du kommst zum Spielen. Das ist eine vollwertige
+                  Antwort — wir suchen dir dann Leute, die es genauso halten.
+                </Caption>
+              ) : (
+                <Stack gap={1}>
+                  {form.afterPlay.map((item) => (
+                    <Caption key={item} tone="soft">
+                      {AFTER_PLAY_HINTS[item]}
+                    </Caption>
+                  ))}
+                </Stack>
+              )}
+            </Stack>
+
+            <Caption tone="muted">
+              Das gilt unabhängig davon, mit wem du spielst. Zwei Männer oder zwei Frauen, die
+              beide in derselben Branche arbeiten und danach noch ein Glas trinken, sind genau der
+              Fall, für den dieser Schritt existiert.
             </Caption>
           </Stack>
         ) : null}

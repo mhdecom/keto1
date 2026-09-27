@@ -19,6 +19,14 @@ Spielstärke, Kalender und Anlage zusammenzubringen. Genau dort ist die Lücke.
 Sie besitzt keine Plätze und will keine besitzen — sie besitzt die Leute und die
 Passung.
 
+Und der eigentliche Wert liegt noch eine Stufe weiter: Wer wöchentlich zwei
+Stunden mit derselben Person auf dem Platz steht, baut einen Kontakt auf. Das
+ist eine der wenigen Formen, in denen Erwachsene noch verlässlich neue Leute
+kennenlernen — und zwar über eine Aktivität statt über ein Profilfoto. Ein
+Apéro danach, manchmal ein beruflicher Austausch: das ist kein Nebeneffekt,
+sondern der Grund, warum jemand die App behält, wenn er seinen Partner schon
+gefunden hat.
+
 ## 2. Das Profil ist das Produkt
 
 Bei einer Dating-App ist das Foto das Produkt. Hier ist es das Profil. Wer die
@@ -56,6 +64,24 @@ nie präzise waren.
 - **Wohnort** als Kreis (nie als Adresse) plus Reiseradius
 - **Platz vorhanden?** — wer buchen kann, ist doppelt attraktiv
 
+### Neben dem Platz: Beruf, Interessen, was danach passiert
+
+Drei Felder, die aus einer Partnersuche ein Netzwerk machen:
+
+- **Beruf** als Freitext plus **Branche** aus einer Liste (IT, Finanzen,
+  Gesundheit, Pharma, Recht, Beratung, Handwerk, Selbstständig, Studium,
+  Pensioniert …)
+- **Interessen** als Tags: Essen, Wein, Reisen, Musik, Kunst, Ski, Wandern,
+  Velo, Startups, Anlegen, Politik, Familie, Ehrenamt …
+- **Nach dem Spiel**: Apéro danach · Zusammen essen · Beruflicher Austausch —
+  Mehrfachauswahl, und leer lassen ist eine vollwertige Antwort
+
+**Das ist bewusst eine eigene Achse, getrennt von der Absicht (Dating).** Zwei
+Männer aus derselben Branche, die nach dem Spiel noch ein Glas trinken, sind
+genau der Fall, um den es hier geht — und der wäre unsichtbar geblieben, hätte
+man das in die romantische Absicht hineingefaltet. Es gilt identisch für zwei
+Frauen, für gemischte Paarungen, für alle.
+
 ### Absicht: so trennt sich Partnersuche von Dating
 
 Drei Optionen statt zwei Apps:
@@ -77,12 +103,13 @@ Kein Zufalls-Deck. Gewichtete Passung, danach sortiert (`src/domain/matching.ts`
 
 | Faktor | Gewicht | Berechnung |
 |---|---|---|
-| Spielstärke | **32 %** | Gauss-Abfall über die Stärkedifferenz, Toleranz skaliert mit Konfidenz |
-| Zeiten | **24 %** | Überschneidung der Wochenraster, normiert auf das *kleinere* |
-| Ort | **18 %** | Gemeinsame Anlagen (65 %) + Luftliniendistanz (35 %) |
-| Spielform | **12 %** | Schnittmenge |
-| Anspruch | **8 %** | Ordinale Distanz |
-| Belag | **6 %** | Schnittmenge |
+| Spielstärke | **28 %** | Gauss-Abfall über die Stärkedifferenz, Toleranz skaliert mit Konfidenz |
+| Zeiten | **22 %** | Überschneidung der Wochenraster, normiert auf das *kleinere* |
+| Ort | **16 %** | Gemeinsame Anlagen (65 %) + Luftliniendistanz (35 %) |
+| Neben dem Platz | **12 %** | Interessen, Branche und «nach dem Spiel» |
+| Spielform | **10 %** | Schnittmenge |
+| Anspruch | **7 %** | Ordinale Distanz |
+| Belag | **5 %** | Schnittmenge |
 
 **Harte Filter** (keine Abwertung, sondern Ausschluss): Geschlechterpräferenz
 beidseitig, Altersfenster beidseitig, und der *engere* der beiden Reiseradien.
@@ -97,10 +124,34 @@ Zwei bewusste Entscheidungen:
   Kompromiss, sondern der nützlichste Trainingspartner überhaupt.
   R6↔R5 ergibt 0.74, R6↔R4 0.31, R6↔R3 0.09.
 
+### Wie «Neben dem Platz» gewichtet wird
+
+Der Faktor sitzt unter den drei Tennis-Grundlagen, aber über den restlichen
+Vorlieben: ein guter Kontakt, mit dem man nicht spielen kann, ist kein
+Tennispartner — aber ein ordentlicher Hit mit jemandem, für den es sich lohnt
+zu bleiben, ist genau das Produkt.
+
+Innerhalb des Faktors: 45 % «nach dem Spiel», 35 % gemeinsame Interessen,
+20 % beruflich. Drei Regeln machen ihn fair:
+
+1. **Wollen beide nur spielen, ist der Faktor 1.0.** Sie sind sich vollkommen
+   einig. Ihre Interessen werden nie gegen sie verwendet — «nur Tennis» darf im
+   UI nie wie ein Mangel aussehen.
+2. **Will nur eine Seite mehr, gibt es 0.3** statt Ausschluss. Das Tennis
+   funktioniert ja trotzdem. Auf der Karte steht dann «Tobias will nur
+   spielen» statt einer generischen Floskel.
+3. **Interessen werden auf die kürzere Liste normiert**, wie die Zeiten. Wer
+   nur drei Dinge angibt, wird dafür nicht bestraft.
+
+Beim beruflichen Teil zählt gleiche Branche am höchsten (gemeinsamer Kontext),
+aber eine *andere* Branche liegt nur knapp darunter — quer über Branchen
+entstehen oft die wertvolleren Kontakte.
+
 ### Der Score erklärt sich selbst
 
 Jede Karte zeigt, *warum* die Person erscheint («Level passt (R6)»,
-«3 gemeinsame Zeitfenster (Di Abend, Do Abend)», «Beide auf TA Mythenquai») —
+«3 gemeinsame Zeitfenster (Di Abend, Do Abend)», «Beide auf TA Mythenquai»,
+«4 gemeinsame Interessen (Essen & Kochen)», «Beide in Gesundheit & Medizin») —
 und den schwächsten Faktor als Caveat («Zeiten passt weniger gut»). Auf dem
 Detailprofil steht die vollständige Aufschlüsselung als Balken.
 
@@ -173,9 +224,10 @@ Partner bucht keinen Platz.
 ## 7. Stand und nächste Schritte
 
 **Steht:**
-Domain-Logik mit 97 Tests · Onboarding-Wizard · Swipe-Deck mit Begründungen ·
-Match und Chat · Anfragen-Feed · bearbeitbares Profil · Supabase-Schema mit RLS ·
-Buchungs-Adapter · Light- und Dark-Mode.
+Domain-Logik mit 116 Tests · Onboarding-Wizard in neun Schritten · Swipe-Deck
+mit Begründungen · Beruf, Interessen und «nach dem Spiel» als eigener
+Matching-Faktor · Match und Chat · Anfragen-Feed · bearbeitbares Profil ·
+Supabase-Schema mit RLS · Buchungs-Adapter · Light- und Dark-Mode.
 
 **Als Nächstes, in dieser Reihenfolge:**
 
@@ -205,6 +257,11 @@ Buchungs-Adapter · Light- und Dark-Mode.
 - **Zuverlässigkeit.** No-Shows sind das zweitgrösste Problem nach dem Finden.
   Eine simple «hat zugesagt und ist erschienen»-Quote wäre stark — dasselbe
   Risiko wie oben.
+- **Wie weit soll das Netzwerk gehen?** Die Bausteine für «zeig mir alle aus
+  meiner Branche» oder «wer geht auch Ski» liegen im Datenmodell. Ein eigener
+  Filter darauf wäre stark — birgt aber das Risiko, dass die App vom Tennis
+  wegdriftet und zu einem schlechteren LinkedIn wird. Vorschlag: vorerst nur
+  als Ranking-Signal und Anzeige, nicht als Filter.
 - **Über Zürich hinaus?** Das Datenmodell ist stadtunabhängig; nur die
   Anlagenliste und die Kreise sind Zürich-spezifisch. Winterthur, Zug und Basel
   wären ein Copy-Paste.
