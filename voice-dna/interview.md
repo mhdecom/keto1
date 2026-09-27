@@ -85,9 +85,25 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 
 ## Block 2 — Geschichtenfundus
 
-**2.1 Drei Momente aus deiner klinischen Arbeit, die eine These tragen koennten.**
+**Frage 4 — Ein Moment aus der klinischen Arbeit, der eine dieser Thesen traegt.**
 
-> _(offen)_
+> Mich stoert, dass Psychedelika sehr, sehr spaet eingesetzt werden, als Zweit-
+> und Drittverfahren. Dabei haetten sie die Chance, schon bei einfachen und
+> fruehen Symptomen zu helfen. Und zwar nicht, indem man Symptome unterdrueckt,
+> sondern indem man das Problem an die Oberflaeche bekommt und verarbeitet.
+>
+> Ich arbeite in der Sprechstunde fuer Second Opinion bei affektiven
+> Erkrankungen. Damit die Leute wirklich psychedelische Substanzen bekommen,
+> muessen sie Kriterien erfuellen: zwei Antidepressiva gehabt haben, eine
+> Augmentationstherapie, das heisst ein schweres, auch sehr nebenwirkungs-
+> reiches Medikament noch on top. Bis dann vielleicht, wenn ein Antidepressivum
+> etabliert ist, eine Ketaminbehandlung erlaubt ist.
+>
+> Bei Psychedelika sind die Kriterien noch viel extremer, weil es
+> Sondergenehmigungen sind. In der Schweiz sind wir privilegiert, aber der
+> Stand ist, dass das ganz schwierig zu erhalten ist. Und wenn, dann bekommen
+> es nur die, die schon sehr schwer krank sind. Den anderen wird es
+> vorenthalten.
 
 **2.2 Ein eigener Irrtum, den du oeffentlich erzaehlen wuerdest.**
 
