@@ -51,7 +51,14 @@ export interface LevelProfile {
   /** Interclub / team experience. */
   interclub: InterclubLevel;
   rallyConsistency: RallyConsistency;
-  /** Optional NTRP-style self rating from 1.0 (never held a racket) to 7.0. */
+  /**
+   * Optional NTRP-style self rating from 1.0 (never held a racket) to 7.0.
+   *
+   * Only meaningful when `classification` is null. A classification is a far
+   * better signal, so level estimation ignores this field when one is present
+   * and the profile form does not store it — keeping both would invite two
+   * sources of truth for the same thing.
+   */
   selfRating: number | null;
 }
 
