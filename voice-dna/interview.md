@@ -46,9 +46,40 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > Gesunde mit Fruehsymptomen, sage ich mal: Unzufriedenheit, Muedigkeit, ohne
 > dass man eine Krankheit hat.
 
-**1.3 Was aergert dich an der Art, wie ueber Psychedelika, Ernaehrung oder maennliche Gesundheit geschrieben wird?**
+**Frage 3 — Was aergert dich an der Art, wie ueber Psychedelika, Ernaehrung oder Maennergesundheit geschrieben wird?**
 
-> _(offen)_
+> **Psychedelika.** Mich nervt immer noch, dass es wie eine Droge behandelt und
+> in eine Kategorie gedacht wird. Viele ueberschaetzen die Gefahr massiv und
+> unterschaetzen den Benefit massiv, machen sich darueber lustig. Das ist oft
+> so mit Innovation. Ich sehe Psychedelika als Innovation im Mental-Health-
+> Bereich. Es wird nicht ernst genommen, man zieht anekdotische Geschichten
+> ueber Nebenwirkungen heran, die in der Substanz einfach nicht stimmen.
+>
+> **Ernaehrung.** Es wird weiter so gesprochen, als haetten wir keine Daten
+> dazu, was die beste Ernaehrung ist. Wir wissen das nicht, heisst es, und dann
+> wird die mediterrane Ernaehrung nach vorne geschrieben. Wir haben sehr wohl
+> gute Daten. Das ist keine Kaffeesatzleserei, auch wenn es individuelle
+> Unterschiede gibt. Es zeigt sich deutlich, dass ganzheitliche, unverarbeitete,
+> organische Lebensmittel und eine Low-Carb- oder ketogene Ernaehrung die
+> groessten Effekte haben. Das heisst nicht, dass man sich immer so ernaehren
+> muss. Aber es kann in bestimmten Sequenzen Sinn machen: eine Zeit lang
+> ketogen, oder fasten, Intervallfasten, auch mehrere Tage am Stueck.
+> Wasserfasten, oder mit Gemuesebruehe, was man sich erlauben will. Sardinen-
+> fasten ist auch eine sehr nette Art. Das wissen wir eigentlich alles, es wird
+> nur nicht angewandt. Menschen sind unglaublich dick und haben schlechte
+> metabolische Gesundheit. Ich glaube, nur acht bis neun Prozent der Amerikaner
+> sind metabolisch gesund. Das aergert mich.
+>
+> **Maennergesundheit.** Mich aergert, dass darueber gelacht wird. Maenner
+> brauchen ja keine Unterstuetzung, das ist ja eh das Patriarchat, warum sollen
+> die sich auch noch zusammentun. Oder: ach, Maennergemeinschaft, ihr seid
+> einfach schwul. Oder man steht gleich in der rechten Ecke, von Burschenschaft
+> bis zu rechten Gruppierungen. Ein paar solche Gruppen mag es geben. Aber es
+> gibt wenig Raum fuer Maenner, die gemeinsam wirklich offen sprechen wollen,
+> gemeinsam etwas machen wollen, ihre maennliche Seite staerken wollen und
+> zugleich ihre weibliche Seite und ihre Gefuehle zulassen. Die aussprechen
+> wollen, was sie im Leben beschwert, und den Gefuehlen, die sie sonst
+> runterschlucken und wegstecken, einen Raum geben.
 
 ---
 
