@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ActivityIndicator,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -12,6 +13,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { photoSource } from '../data/photos';
 import { useTheme, type Theme } from '../theme';
 
 // ---------------------------------------------------------------------------
@@ -500,22 +502,38 @@ export function Stepper({
 const AVATAR_COLORS = ['#C2593A', '#14573F', '#A9B72E', '#4A6FA5', '#8B5E83', '#B07B3C'];
 
 /**
- * Initials avatar. No photo uploads in the MVP on purpose: a matching
- * algorithm is easier to judge when the cards are not decided by the picture,
- * and it keeps the demo free of stock-photo strangers.
+ * Avatar: the profile photo when there is one, a coloured initial when there
+ * is not. The fallback is a first-class state, not a placeholder to apologise
+ * for — plenty of people will play without ever uploading a picture, and the
+ * app has to look finished for them too.
  */
-export function Avatar({ name, size = 48 }: { name: string; size?: number }) {
-  const theme = useTheme();
+export function Avatar({
+  name,
+  size = 48,
+  photo,
+}: {
+  name: string;
+  size?: number;
+  photo?: string;
+}) {
   let hash = 0;
   for (let i = 0; i < name.length; i += 1) hash = (hash * 31 + name.charCodeAt(i)) % 997;
   const background = AVATAR_COLORS[hash % AVATAR_COLORS.length];
 
+  const shape = {
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+  } as const;
+
+  if (photo) {
+    return <Image source={photoSource(photo)} style={shape} resizeMode="cover" />;
+  }
+
   return (
     <View
       style={{
-        width: size,
-        height: size,
-        borderRadius: size / 2,
+        ...shape,
         backgroundColor: background,
         alignItems: 'center',
         justifyContent: 'center',

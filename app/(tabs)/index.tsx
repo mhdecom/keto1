@@ -111,7 +111,7 @@ export default function Discover() {
                 gap: theme.spacing(4),
               }}
             >
-              <Avatar name={matched.player.firstName} size={72} />
+              <Avatar name={matched.player.firstName} size={72} photo={matched.player.photos[0]} />
               <Stack gap={2}>
                 <Title style={{ textAlign: 'center' }}>
                   {matched.dating ? 'Match!' : 'Ihr könnt spielen!'}

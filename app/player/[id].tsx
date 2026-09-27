@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Linking, Pressable } from 'react-native';
+import { Dimensions, Image, Linking, Pressable, ScrollView } from 'react-native';
+import { photoSource } from '../../src/data/photos';
 import { SlotGrid } from '../../src/components/SlotGrid';
 import {
   Avatar,
@@ -37,6 +38,9 @@ import { VENUE_BY_ID, VENUE_NAMES } from '../../src/domain/venues';
 import { bookingStatusFor, bookingUrlFor } from '../../src/lib/courtProviders';
 import { useSession } from '../../src/state/session';
 
+const GALLERY_WIDTH = Dimensions.get('window').width;
+const GALLERY_HEIGHT = Math.round(GALLERY_WIDTH * 0.85);
+
 export default function PlayerDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { repository, me } = useSession();
@@ -63,8 +67,30 @@ export default function PlayerDetail() {
   return (
     <Screen scroll>
       <Stack gap={6} style={{ paddingTop: 12 }}>
+        {player.photos.length > 0 ? (
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            style={{
+              marginHorizontal: -20,
+              height: GALLERY_HEIGHT,
+            }}
+          >
+            {player.photos.map((photo) => (
+              <Image
+                key={photo}
+                source={photoSource(photo)}
+                style={{ width: GALLERY_WIDTH, height: GALLERY_HEIGHT }}
+                resizeMode="cover"
+                accessibilityLabel={`Foto von ${player.firstName}`}
+              />
+            ))}
+          </ScrollView>
+        ) : null}
+
         <Row gap={4}>
-          <Avatar name={player.firstName} size={72} />
+          <Avatar name={player.firstName} size={72} photo={player.photos[0]} />
           <Stack gap={1} style={{ flex: 1 }}>
             <Display>{player.firstName}</Display>
             <Body tone="soft">
@@ -74,6 +100,9 @@ export default function PlayerDetail() {
               <Body tone="soft">
                 {player.profession} · {INDUSTRY_LABELS[player.industry]}
               </Body>
+            ) : null}
+            {player.workNeighbourhood ? (
+              <Caption tone="muted">Arbeitet: {player.workNeighbourhood}</Caption>
             ) : null}
             <Row gap={2} wrap>
               <Badge text={levelLabel(player.level)} tone="primary" />

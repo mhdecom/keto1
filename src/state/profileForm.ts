@@ -26,10 +26,13 @@ import type {
  * database.
  */
 export interface ProfileForm {
+  photos: string[];
   firstName: string;
   birthYearText: string;
   gender: Gender;
   districtId: string;
+  /** Empty string means "no fixed workplace", which is a valid answer. */
+  workDistrictId: string;
   radiusKm: number;
 
   classification: SwissClassification | 'unclassified';
@@ -63,10 +66,12 @@ export interface ProfileForm {
 }
 
 export const EMPTY_FORM: ProfileForm = {
+  photos: [],
   firstName: '',
   birthYearText: '',
   gender: 'male',
   districtId: 'k4',
+  workDistrictId: '',
   radiusKm: 8,
 
   classification: 'unclassified',
@@ -101,10 +106,15 @@ export const EMPTY_FORM: ProfileForm = {
 
 export function formFromPlayer(player: Player): ProfileForm {
   return {
+    photos: player.photos,
     firstName: player.firstName,
     birthYearText: String(player.birthYear),
     gender: player.gender,
     districtId: districtIdForCoordinates(player.lat, player.lon),
+    workDistrictId:
+      player.workLat !== null && player.workLon !== null
+        ? districtIdForCoordinates(player.workLat, player.workLon)
+        : '',
     radiusKm: player.radiusKm,
 
     classification: player.level.classification ?? 'unclassified',
@@ -191,17 +201,21 @@ export function playerFromForm(
     lon: 8.5417,
   };
   const classification = form.classification === 'unclassified' ? null : form.classification;
+  const work = form.workDistrictId ? districtById(form.workDistrictId) : undefined;
 
   return {
     id: options.id,
     firstName: form.firstName.trim(),
     birthYear: Number(form.birthYearText),
     gender: form.gender,
-    photos: [],
+    photos: form.photos,
     bio: form.bio.trim(),
     neighbourhood: district.name,
     lat: district.lat,
     lon: district.lon,
+    workNeighbourhood: work?.name ?? '',
+    workLat: work?.lat ?? null,
+    workLon: work?.lon ?? null,
     radiusKm: form.radiusKm,
     level: {
       classification,

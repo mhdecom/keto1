@@ -1,6 +1,7 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { estimateLevel, levelLabel } from '../domain/level';
+import { Image, StyleSheet, View } from 'react-native';
+import { photoSource } from '../data/photos';
 import {
   AFTER_PLAY_LABELS,
   INDUSTRY_LABELS,
@@ -8,6 +9,8 @@ import {
   INTEREST_LABELS,
   SKILL_LABELS,
 } from '../domain/labels';
+import { estimateLevel, levelLabel } from '../domain/level';
+import { formatKm } from '../domain/location';
 import { ageFromBirthYear, scoreToPercent, type MatchCandidate } from '../domain/matching';
 import { venueName } from '../domain/venues';
 import { useTheme } from '../theme';
@@ -17,11 +20,16 @@ import { Avatar, Badge, Body, Caption, Chip, Label, Row, Title } from './ui';
 const MAX_SKILLS = 3;
 const MAX_VENUES = 4;
 const MAX_INTERESTS = 5;
+const HERO_HEIGHT = 210;
 
 /**
  * The swipe card. It shows *why* the candidate was surfaced, not just who they
  * are: a matching app that cannot explain itself gets swiped through blindly,
  * and the reasons are the part of this product that a photo grid cannot copy.
+ *
+ * A photo, when there is one, leads — you do want to see who you are about to
+ * spend two hours with. But it is a band across the top rather than the whole
+ * card, so the reasons stay above the fold.
  */
 export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
   const theme = useTheme();
@@ -30,12 +38,20 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
   const level = estimateLevel(player.level);
   const strengths = player.strengths.slice(0, MAX_SKILLS);
   const weaknesses = player.weaknesses.slice(0, MAX_SKILLS);
+  const photo = player.photos[0];
 
   // Shared interests first: the reason to look at this block at all is to see
   // what you have in common, not to read a list in alphabetical order.
   const shared = player.interests.filter((item) => candidate.offCourt.sharedInterests.includes(item));
   const rest = player.interests.filter((item) => !candidate.offCourt.sharedInterests.includes(item));
   const interests = [...shared, ...rest].slice(0, MAX_INTERESTS);
+
+  const where = `${player.neighbourhood} · ${formatKm(candidate.distanceKm)} · ${
+    INTENSITY_LABELS[player.intensity]
+  }`;
+  const work = player.profession
+    ? `${player.profession} · ${INDUSTRY_LABELS[player.industry]}`
+    : null;
 
   return (
     <View
@@ -45,8 +61,6 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
         borderRadius: theme.radius.lg,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: theme.colors.border,
-        padding: theme.spacing(5),
-        gap: theme.spacing(4),
         // Clip rather than spill: a long profile must not paint over the
         // Like/Pass buttons below the deck.
         overflow: 'hidden',
@@ -57,48 +71,127 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
         elevation: 4,
       }}
     >
-      <Row gap={3}>
-        <Avatar name={player.firstName} size={60} />
-        <View style={{ flex: 1, gap: theme.spacing(1) }}>
-          <Row gap={2} wrap>
-            <Title>
-              {player.firstName}, {age}
-            </Title>
-            {candidate.datingEnabled ? <Badge text="OFFEN FÜR MEHR" tone="accent" /> : null}
-          </Row>
-          <Caption>
-            {player.neighbourhood} · {candidate.distanceKm < 1 ? '<1' : candidate.distanceKm.toFixed(1)} km
-            {' · '}
-            {INTENSITY_LABELS[player.intensity]}
-          </Caption>
-          {player.profession ? (
-            <Caption tone="soft">
-              {player.profession} · {INDUSTRY_LABELS[player.industry]}
-            </Caption>
-          ) : null}
-        </View>
-        <View style={{ alignItems: 'flex-end', gap: theme.spacing(1) }}>
+      {photo ? (
+        <View
+          style={{
+            height: HERO_HEIGHT,
+            // Explicit, because react-native-web defaults a View to
+            // `position: static`, which would make the absolutely positioned
+            // photo and overlays below anchor to the card instead of to this
+            // band — and paint the picture across the whole card.
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <Image
+            source={photoSource(photo)}
+            style={StyleSheet.absoluteFill}
+            resizeMode="cover"
+            accessibilityLabel={`Foto von ${player.firstName}`}
+          />
+          {/* Scrim so white text stays legible over any photo, light or dark. */}
+          <LinearGradient
+            pointerEvents="none"
+            colors={['rgba(12,10,9,0)', 'rgba(12,10,9,0.25)', 'rgba(12,10,9,0.8)']}
+            locations={[0, 0.55, 1]}
+            style={StyleSheet.absoluteFill}
+          />
           <View
             style={{
-              backgroundColor: theme.colors.primary,
-              borderRadius: theme.radius.sm,
-              paddingHorizontal: theme.spacing(2.5),
+              position: 'absolute',
+              left: theme.spacing(5),
+              right: theme.spacing(5),
+              bottom: theme.spacing(4),
+              gap: theme.spacing(1),
+            }}
+          >
+            <Row gap={2} wrap>
+              <Title style={{ color: '#FFFFFF' }}>
+                {player.firstName}, {age}
+              </Title>
+              <Badge text={levelLabel(player.level)} tone="accent" />
+              {candidate.datingEnabled ? <Badge text="OFFEN FÜR MEHR" tone="accent" /> : null}
+            </Row>
+            <Caption style={{ color: 'rgba(255,255,255,0.85)' }}>{where}</Caption>
+            {work ? (
+              <Caption style={{ color: 'rgba(255,255,255,0.85)' }}>{work}</Caption>
+            ) : null}
+          </View>
+          <View
+            style={{
+              position: 'absolute',
+              top: theme.spacing(3),
+              right: theme.spacing(3),
+              backgroundColor: 'rgba(12,10,9,0.6)',
+              borderRadius: theme.radius.pill,
+              paddingHorizontal: theme.spacing(3),
               paddingVertical: theme.spacing(1.5),
             }}
           >
-            <Body style={{ color: theme.colors.onPrimary, fontWeight: '800' }}>
-              {levelLabel(player.level)}
-            </Body>
+            <Caption style={{ color: '#FFFFFF', fontWeight: '700' }}>
+              {scoreToPercent(candidate.score)}% Passung
+            </Caption>
           </View>
-          <Caption tone="muted">{scoreToPercent(candidate.score)}% Passung</Caption>
+          {player.photos.length > 1 ? (
+            <Row gap={1} style={{ position: 'absolute', top: theme.spacing(3), left: theme.spacing(3) }}>
+              {player.photos.map((item, index) => (
+                <View
+                  key={item}
+                  style={{
+                    width: 18,
+                    height: 3,
+                    borderRadius: 2,
+                    backgroundColor: index === 0 ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+                  }}
+                />
+              ))}
+            </Row>
+          ) : null}
         </View>
-      </Row>
+      ) : (
+        <Row gap={3} style={{ padding: theme.spacing(5), paddingBottom: 0 }}>
+          <Avatar name={player.firstName} size={60} />
+          <View style={{ flex: 1, gap: theme.spacing(1) }}>
+            <Row gap={2} wrap>
+              <Title>
+                {player.firstName}, {age}
+              </Title>
+              {candidate.datingEnabled ? <Badge text="OFFEN FÜR MEHR" tone="accent" /> : null}
+            </Row>
+            <Caption>{where}</Caption>
+            {work ? <Caption tone="soft">{work}</Caption> : null}
+          </View>
+          <View style={{ alignItems: 'flex-end', gap: theme.spacing(1) }}>
+            <View
+              style={{
+                backgroundColor: theme.colors.primary,
+                borderRadius: theme.radius.sm,
+                paddingHorizontal: theme.spacing(2.5),
+                paddingVertical: theme.spacing(1.5),
+              }}
+            >
+              <Body style={{ color: theme.colors.onPrimary, fontWeight: '800' }}>
+                {levelLabel(player.level)}
+              </Body>
+            </View>
+            <Caption tone="muted">{scoreToPercent(candidate.score)}% Passung</Caption>
+          </View>
+        </Row>
+      )}
 
       {/*
         The flexible middle. Sections fall off the bottom on a short screen
         instead of pushing the footer out of the card.
       */}
-      <View style={{ flex: 1, gap: theme.spacing(4), overflow: 'hidden' }}>
+      <View
+        style={{
+          flex: 1,
+          gap: theme.spacing(4),
+          padding: theme.spacing(5),
+          paddingBottom: theme.spacing(3),
+          overflow: 'hidden',
+        }}
+      >
         {candidate.reasons.length > 0 ? (
           <View style={{ gap: theme.spacing(2) }}>
             <Label>Warum diese Person</Label>
@@ -172,7 +265,10 @@ export function PlayerCard({ candidate }: { candidate: MatchCandidate }) {
         ) : null}
       </View>
 
-      <Caption tone="muted">
+      <Caption
+        tone="muted"
+        style={{ paddingHorizontal: theme.spacing(5), paddingBottom: theme.spacing(4) }}
+      >
         {player.level.yearsPlaying} Jahre Erfahrung
         {level.estimated ? ' · Level selbst eingeschätzt' : ' · klassiert'} · Antippen für alles
       </Caption>

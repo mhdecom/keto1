@@ -62,6 +62,25 @@ export class SupabaseRepository implements Repository {
     if (error) throw new Error(error.message);
   }
 
+  async savePhoto(localUri: string): Promise<string> {
+    const userId = await this.requireUserId();
+    const response = await fetch(localUri);
+    if (!response.ok) throw new Error('Bild konnte nicht gelesen werden');
+    const blob = await response.blob();
+
+    const extension = (blob.type.split('/')[1] ?? 'jpg').replace('jpeg', 'jpg');
+    // Namespaced by user id: the storage policy only lets a user write inside
+    // their own folder, so the path is part of the authorisation.
+    const path = `${userId}/${Date.now()}.${extension}`;
+
+    const { error } = await this.client.storage
+      .from('photos')
+      .upload(path, blob, { contentType: blob.type, upsert: false });
+    if (error) throw new Error(error.message);
+
+    return this.client.storage.from('photos').getPublicUrl(path).data.publicUrl;
+  }
+
   async getPlayer(playerId: string): Promise<Player | null> {
     const { data, error } = await this.client
       .from('players')

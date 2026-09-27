@@ -1,5 +1,5 @@
 /**
- * Domain model for Tinder Tennis.
+ * Domain model for It's a Match.
  *
  * Everything in `src/domain` is pure TypeScript with no React Native or
  * Supabase imports, so the matching logic can be unit tested in isolation.
@@ -235,6 +235,18 @@ export interface Player {
   neighbourhood: string;
   lat: number;
   lon: number;
+
+  /**
+   * Where this player works, when they chose to say.
+   *
+   * A second anchor, not a replacement: plenty of people play near the office
+   * on a weekday evening and near home at the weekend. Matching uses whichever
+   * of the two anchors brings the pair closest together.
+   */
+  workNeighbourhood: string;
+  workLat: number | null;
+  workLon: number | null;
+
   /** Maximum travel distance in kilometres. */
   radiusKm: number;
 

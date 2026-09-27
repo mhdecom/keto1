@@ -35,6 +35,21 @@ describe('LocalRepository — profile', () => {
   });
 });
 
+describe('LocalRepository — photos', () => {
+  it('returns the picked URI unchanged, so no upload is needed for the demo', async () => {
+    const repo = makeRepo();
+    const uri = 'file:///tmp/pick/IMG_0042.jpg';
+    expect(await repo.savePhoto(uri)).toBe(uri);
+  });
+
+  it('stores photos on the profile and reads them back', async () => {
+    const repo = makeRepo();
+    const photo = await repo.savePhoto('file:///tmp/pick/IMG_0042.jpg');
+    await repo.saveCurrentPlayer({ ...DEMO_ME, photos: [photo] });
+    expect((await repo.getCurrentPlayer())?.photos).toEqual([photo]);
+  });
+});
+
 describe('LocalRepository — swiping', () => {
   let repo: LocalRepository;
 

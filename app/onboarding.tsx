@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View } from 'react-native';
+import { PhotoPicker } from '../src/components/PhotoPicker';
 import { SlotGrid } from '../src/components/SlotGrid';
 import {
   Body,
@@ -49,6 +50,11 @@ import {
 import { useSession } from '../src/state/session';
 import { useTheme } from '../src/theme';
 
+const WORK_DISTRICT_OPTIONS = [
+  { value: '', label: 'Kein fester Arbeitsort' },
+  ...DISTRICT_OPTIONS,
+];
+
 const CLASSIFICATION_OPTIONS = [
   { value: 'unclassified' as const, label: 'Unklassiert' },
   ...SWISS_CLASSIFICATIONS.map((value) => ({ value, label: value })),
@@ -86,7 +92,11 @@ const STEPS: Step[] = [
       'Wer regelmässig mit dir spielt, verbringt viele Stunden mit dir. Das hier entscheidet, ob daraus ein Kontakt wird.',
   },
   { id: 'intent', title: 'Was suchst du?', subtitle: 'Hier trennt sich Partnersuche von Dating.' },
-  { id: 'bio', title: 'Ein Satz zu dir', subtitle: 'Was jemand wissen sollte, bevor er anfragt.' },
+  {
+    id: 'bio',
+    title: 'Bild und ein Satz zu dir',
+    subtitle: 'Was jemand sehen und wissen sollte, bevor er anfragt.',
+  },
 ];
 
 export default function Onboarding() {
@@ -138,7 +148,7 @@ export default function Onboarding() {
       <Screen scroll>
         <Stack gap={6} style={{ paddingTop: theme.spacing(12) }}>
           <Stack gap={3}>
-            <Display>Tinder Tennis</Display>
+            <Display>It’s a Match</Display>
             <Title tone="soft">Finde in Zürich jemanden, der zu deinem Spiel passt.</Title>
           </Stack>
 
@@ -243,6 +253,20 @@ export default function Onboarding() {
                 onChange={([districtId]) => districtId && patch({ districtId })}
               />
             </Stack>
+            <Stack gap={2}>
+              <Label>Wo arbeitest du?</Label>
+              <ChoiceGroup
+                options={WORK_DISTRICT_OPTIONS}
+                value={[form.workDistrictId]}
+                onChange={([workDistrictId]) => patch({ workDistrictId: workDistrictId ?? '' })}
+              />
+              <Caption tone="muted">
+                Zählt beim Matching als zweiter Ort. Wer in Schwamendingen wohnt und am
+                Paradeplatz arbeitet, passt am Mittwochabend zu ganz anderen Leuten als am
+                Sonntagmorgen.
+              </Caption>
+            </Stack>
+
             <Stack gap={2}>
               <Label>Wie weit fährst du für ein Spiel?</Label>
               <Stepper
@@ -544,7 +568,12 @@ export default function Onboarding() {
         ) : null}
 
         {step.id === 'bio' ? (
-          <Stack gap={4}>
+          <Stack gap={5}>
+            <Stack gap={2}>
+              <Label>Bilder</Label>
+              <PhotoPicker photos={form.photos} onChange={(photos) => patch({ photos })} />
+            </Stack>
+
             <Input
               value={form.bio}
               onChangeText={(bio) => patch({ bio })}

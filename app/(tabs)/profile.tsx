@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
+import { PhotoPicker } from '../../src/components/PhotoPicker';
 import { SlotGrid } from '../../src/components/SlotGrid';
 import {
   Avatar,
@@ -46,6 +47,11 @@ import { VENUES } from '../../src/domain/venues';
 import { formFromPlayer, playerFromForm, validateStep, type ProfileForm } from '../../src/state/profileForm';
 import { useSession } from '../../src/state/session';
 import { useTheme } from '../../src/theme';
+
+const WORK_DISTRICT_OPTIONS = [
+  { value: '', label: 'Kein fester Arbeitsort' },
+  ...DISTRICT_OPTIONS,
+];
 
 const CLASSIFICATION_OPTIONS = [
   { value: 'unclassified' as const, label: 'Unklassiert' },
@@ -115,7 +121,7 @@ export default function Profile() {
       <Screen scroll>
         <Stack gap={6} style={{ paddingTop: theme.spacing(3) }}>
           <Row gap={4}>
-            <Avatar name={me.firstName} size={72} />
+            <Avatar name={me.firstName} size={72} photo={me.photos[0]} />
             <Stack gap={1} style={{ flex: 1 }}>
               <Display>{me.firstName}</Display>
               <Body tone="soft">
@@ -125,6 +131,9 @@ export default function Profile() {
                 <Body tone="soft">
                   {me.profession} · {INDUSTRY_LABELS[me.industry]}
                 </Body>
+              ) : null}
+              {me.workNeighbourhood ? (
+                <Caption tone="muted">Arbeitet: {me.workNeighbourhood}</Caption>
               ) : null}
               <Row gap={2} wrap>
                 <Badge text={levelLabel(me.level)} tone="primary" />
@@ -188,6 +197,11 @@ export default function Profile() {
         <Title>Profil bearbeiten</Title>
 
         <Stack gap={2}>
+          <Label>Bilder</Label>
+          <PhotoPicker photos={form.photos} onChange={(photos) => patch({ photos })} />
+        </Stack>
+
+        <Stack gap={2}>
           <Label>Vorname</Label>
           <Input value={form.firstName} onChangeText={(firstName) => patch({ firstName })} maxLength={40} />
         </Stack>
@@ -208,6 +222,15 @@ export default function Profile() {
             options={DISTRICT_OPTIONS}
             value={[form.districtId]}
             onChange={([districtId]) => districtId && patch({ districtId })}
+          />
+        </Stack>
+
+        <Stack gap={2}>
+          <Label>Arbeitsort</Label>
+          <ChoiceGroup
+            options={WORK_DISTRICT_OPTIONS}
+            value={[form.workDistrictId]}
+            onChange={([workDistrictId]) => patch({ workDistrictId: workDistrictId ?? '' })}
           />
         </Stack>
 

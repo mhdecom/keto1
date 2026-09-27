@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import {
+  Avatar,
   Badge,
   Body,
   Caption,
@@ -86,10 +87,13 @@ export default function Chat() {
         }}
       >
         <Pressable onPress={() => router.push(`/player/${other.id}`)}>
-          <Row gap={2} wrap>
-            <Title>{other.firstName}</Title>
-            <Badge text={levelLabel(other.level)} tone="primary" />
-            {match.datingEnabled ? <Badge text="DATE" tone="accent" /> : null}
+          <Row gap={3}>
+            <Avatar name={other.firstName} size={40} photo={other.photos[0]} />
+            <Row gap={2} wrap style={{ flex: 1 }}>
+              <Title>{other.firstName}</Title>
+              <Badge text={levelLabel(other.level)} tone="primary" />
+              {match.datingEnabled ? <Badge text="DATE" tone="accent" /> : null}
+            </Row>
           </Row>
         </Pressable>
 

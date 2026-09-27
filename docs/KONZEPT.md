@@ -1,4 +1,4 @@
-# Tinder Tennis — Konzept
+# It’s a Match — Konzept
 
 ## 1. Das Problem
 
@@ -15,7 +15,7 @@ Aber das ist ein Ranglisten-Anhängsel eines Buchungssystems, kein
 Matching-Produkt: es sortiert Leute nach Ergebnissen, statt sie nach
 Spielstärke, Kalender und Anlage zusammenzubringen. Genau dort ist die Lücke.
 
-**Positionierung:** Tinder Tennis ist die Schicht *über* den Buchungssystemen.
+**Positionierung:** It’s a Match ist die Schicht *über* den Buchungssystemen.
 Sie besitzt keine Plätze und will keine besitzen — sie besitzt die Leute und die
 Passung.
 
@@ -61,7 +61,12 @@ nie präzise waren.
 - **Rückhand** ein- oder zweihändig
 - **Verfügbarkeit** als Wochenraster: 7 Tage × 3 Blöcke (Früh / Mittag / Abend)
 - **Anlagen**, auf die man regelmässig geht
+- **Fotos**, bis zu sechs. Das erste führt die Karte an. Ohne Bild gibt es
+  einen Initialen-Avatar — das ist ein vollwertiger Zustand, kein Mangel: viele
+  werden spielen, ohne je ein Bild hochzuladen, und für die muss die App fertig
+  aussehen.
 - **Wohnort** als Kreis (nie als Adresse) plus Reiseradius
+- **Arbeitsort** als Kreis, freiwillig
 - **Platz vorhanden?** — wer buchen kann, ist doppelt attraktiv
 
 ### Neben dem Platz: Beruf, Interessen, was danach passiert
@@ -105,7 +110,7 @@ Kein Zufalls-Deck. Gewichtete Passung, danach sortiert (`src/domain/matching.ts`
 |---|---|---|
 | Spielstärke | **28 %** | Gauss-Abfall über die Stärkedifferenz, Toleranz skaliert mit Konfidenz |
 | Zeiten | **22 %** | Überschneidung der Wochenraster, normiert auf das *kleinere* |
-| Ort | **16 %** | Gemeinsame Anlagen (65 %) + Luftliniendistanz (35 %) |
+| Ort | **16 %** | Gemeinsame Anlagen (65 %) + kürzeste Distanz zwischen Wohn- und Arbeitsorten (35 %) |
 | Neben dem Platz | **12 %** | Interessen, Branche und «nach dem Spiel» |
 | Spielform | **10 %** | Schnittmenge |
 | Anspruch | **7 %** | Ordinale Distanz |
@@ -117,6 +122,15 @@ Das sind erklärte Präferenzen — wer sie aufweicht, baut einen Bug.
 
 Zwei bewusste Entscheidungen:
 
+- **Ort heisst zwei Anker, nicht einen.** Wohnort und Arbeitsort sind
+  Alternativen, nicht ein Mittelwert. Gemessen wird die kürzeste Verbindung
+  zwischen irgendeinem Anker der einen und irgendeinem der anderen Person. Wer
+  in Schwamendingen wohnt und am Paradeplatz arbeitet, ist am Mittwochabend ein
+  realistischer Partner für den Kreis 4 und am Sonntagmorgen nicht. Ein
+  Mittelwert der beiden Punkte läge im See und würde niemanden matchen. Der
+  Reiseradius als harter Filter misst ebenfalls über den besten Anker: wenn dein
+  Büro um die Ecke meiner Wohnung liegt, entscheidet nicht die Distanz zwischen
+  unseren Wohnungen, ob wir spielen können.
 - **Zeiten werden auf das kleinere Raster normiert.** Wer nur Dienstagabend
   kann, passt perfekt zu jemandem, der immer kann. Über die Vereinigungsmenge zu
   normieren würde Vielbeschäftigte bestrafen — und genau die brauchen die App.
@@ -151,7 +165,8 @@ entstehen oft die wertvolleren Kontakte.
 
 Jede Karte zeigt, *warum* die Person erscheint («Level passt (R6)»,
 «3 gemeinsame Zeitfenster (Di Abend, Do Abend)», «Beide auf TA Mythenquai»,
-«4 gemeinsame Interessen (Essen & Kochen)», «Beide in Gesundheit & Medizin») —
+«4 gemeinsame Interessen (Essen & Kochen)», «Beide in Gesundheit & Medizin»,
+«Arbeitet gleich bei dir in der Nähe») —
 und den schwächsten Faktor als Caveat («Zeiten passt weniger gut»). Auf dem
 Detailprofil steht die vollständige Aufschlüsselung als Balken.
 
@@ -203,7 +218,7 @@ Club-, Firmen- und Privatplätze, die kein System abdeckt. Ab hier ist die App
 nicht mehr von einem Anbieter abhängig — und für einen Club, der heute per
 Excel-Liste vermietet, ist sie sofort attraktiv.
 
-Das Verhandlungsargument in alle Richtungen ist dasselbe: **Tinder Tennis
+Das Verhandlungsargument in alle Richtungen ist dasselbe: **It’s a Match
 erzeugt Buchungen, die sonst nicht stattgefunden hätten.** Ein Spieler ohne
 Partner bucht keinen Platz.
 
@@ -224,19 +239,21 @@ Partner bucht keinen Platz.
 ## 7. Stand und nächste Schritte
 
 **Steht:**
-Domain-Logik mit 116 Tests · Onboarding-Wizard in neun Schritten · Swipe-Deck
-mit Begründungen · Beruf, Interessen und «nach dem Spiel» als eigener
-Matching-Faktor · Match und Chat · Anfragen-Feed · bearbeitbares Profil ·
-Supabase-Schema mit RLS · Buchungs-Adapter · Light- und Dark-Mode.
+Domain-Logik mit 135 Tests · Onboarding-Wizard in neun Schritten · Fotos mit
+Initialen-Fallback · Swipe-Deck mit Begründungen · Beruf, Interessen und «nach
+dem Spiel» als eigener Matching-Faktor · Wohn- und Arbeitsort als zwei
+Ortsanker · Match und Chat · Anfragen-Feed · bearbeitbares Profil ·
+Supabase-Schema mit RLS und Storage-Policies · Buchungs-Adapter · Light- und
+Dark-Mode.
 
 **Als Nächstes, in dieser Reihenfolge:**
 
 1. **Auth und Supabase scharf schalten.** Schema und Repository liegen bereit;
    es fehlen die Login-Screens (Apple, Google, Magic Link) und das Anlegen der
    Profilzeile nach der Registrierung.
-2. **Fotos.** Bewusst noch nicht drin — ein Matching lässt sich besser
-   beurteilen, wenn nicht das Bild entscheidet. Für den echten Betrieb braucht
-   es sie, inklusive Moderation.
+2. **Foto-Moderation.** Der Upload steht, inklusive Storage-Policies, die nur
+   Schreibzugriff im eigenen Ordner erlauben. Was fehlt, ist die Prüfung der
+   Inhalte — bei einer App mit Dating-Anteil ist das keine Kür.
 3. **Push-Benachrichtigungen** für Matches, Nachrichten und passende Anfragen.
    Ohne Push stirbt der Anfragen-Feed an Latenz.
 4. **Melden und Blockieren im UI** (Backend steht).
@@ -245,7 +262,22 @@ Supabase-Schema mit RLS · Buchungs-Adapter · Light- und Dark-Mode.
    — eine Matching-App wird nicht stadtweit lanciert, sondern dort, wo die
    Dichte schon existiert.
 
-## 8. Offene Produktfragen
+## 8. Zum Namen
+
+Die App heisst **It's a Match**. Zwei Punkte, die vor dem Store-Eintrag geprüft
+gehören, weil sie später teuer werden:
+
+- «It's a match» ist die bekannteste Zeile aus Tinder selbst. Match Group hält
+  ausserdem Marken rund um «Match». Eine Markenrecherche beim IGE (Schweiz) und
+  beim EUIPO vor dem Launch ist kein Luxus.
+- Als reine Wortmarke ist die Wendung beschreibend und damit kaum schützbar. Ein
+  eigenständiges Logo und eine Wort-Bild-Marke sind der praktikable Weg.
+
+Wenn sich daraus ein Problem ergibt, ist der Wechsel billig: der Name steckt in
+`app.json` (Name, Slug, Scheme, Bundle-ID), im Titel auf dem Startbildschirm
+und in den beiden Markdown-Dateien. Sonst nirgends.
+
+## 9. Offene Produktfragen
 
 - **Preis.** Gratis mit später Premium (mehr Swipes, Wer-mag-mich)? Oder von
   Anfang an ein kleiner Jahresbeitrag, der Karteileichen fernhält? Für eine

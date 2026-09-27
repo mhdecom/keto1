@@ -61,7 +61,7 @@ function MatchRow({ entry, onPress }: { entry: MatchWithPlayer; onPress: () => v
   return (
     <Pressable onPress={onPress} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>
       <Row gap={3}>
-        <Avatar name={other.firstName} size={52} />
+        <Avatar name={other.firstName} size={52} photo={other.photos[0]} />
         <Stack gap={1} style={{ flex: 1 }}>
           <Row gap={2} wrap>
             <Title>

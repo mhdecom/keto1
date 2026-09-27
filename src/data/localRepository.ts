@@ -56,6 +56,13 @@ export class LocalRepository implements Repository {
     await this.write(KEYS.me, player);
   }
 
+  async savePhoto(localUri: string): Promise<string> {
+    // Nothing to upload: the picker already gave us a URI the device can read.
+    // It survives a restart on iOS and Android; on web it is a blob URL that
+    // does not, which is noted in the README rather than papered over here.
+    return localUri;
+  }
+
   async getPlayer(playerId: string): Promise<Player | null> {
     const me = await this.getCurrentPlayer();
     if (me && me.id === playerId) return me;

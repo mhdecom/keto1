@@ -120,11 +120,40 @@ describe('formFromPlayer', () => {
       expect(rebuilt.surfaces).toEqual(original.surfaces);
       expect(rebuilt.strengths).toEqual(original.strengths);
       expect(rebuilt.weaknesses).toEqual(original.weaknesses);
+      expect(rebuilt.photos).toEqual(original.photos);
+      expect(rebuilt.profession).toBe(original.profession);
+      expect(rebuilt.industry).toBe(original.industry);
+      expect(rebuilt.interests).toEqual(original.interests);
+      expect(rebuilt.afterPlay).toEqual(original.afterPlay);
+      // The workplace is a matching input too, so it must survive an edit.
+      expect(rebuilt.workNeighbourhood).toBe(original.workNeighbourhood);
+      expect(rebuilt.workLat).toBe(original.workLat);
+      expect(rebuilt.workLon).toBe(original.workLon);
     }
   });
 
   it('maps coordinates back to the nearest district', () => {
     const form = formFromPlayer(DEMO_ME);
     expect(form.districtId).toBe('k4');
+  });
+
+  it('leaves the workplace empty when a player has no fixed one', () => {
+    const noWork = SEED_PLAYERS.find((player) => player.workLat === null);
+    expect(noWork).toBeDefined();
+    const form = formFromPlayer(noWork as NonNullable<typeof noWork>);
+    expect(form.workDistrictId).toBe('');
+
+    const rebuilt = playerFromForm(form, { id: 'x' });
+    expect(rebuilt.workLat).toBeNull();
+    expect(rebuilt.workLon).toBeNull();
+    expect(rebuilt.workNeighbourhood).toBe('');
+  });
+
+  it('drops a workplace when it is cleared in the form', () => {
+    const withWork = formFromPlayer(DEMO_ME);
+    expect(withWork.workDistrictId).not.toBe('');
+    const cleared = playerFromForm({ ...withWork, workDistrictId: '' }, { id: 'me' });
+    expect(cleared.workLat).toBeNull();
+    expect(cleared.workNeighbourhood).toBe('');
   });
 });

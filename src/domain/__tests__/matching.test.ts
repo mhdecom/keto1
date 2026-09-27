@@ -25,6 +25,9 @@ function makePlayer(overrides: Partial<Player> = {}): Player {
     neighbourhood: 'Kreis 4',
     lat: 47.376,
     lon: 8.526,
+    workNeighbourhood: '',
+    workLat: null,
+    workLon: null,
     radiusKm: 10,
     level: {
       classification: 'R6',

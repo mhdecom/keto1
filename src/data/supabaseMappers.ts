@@ -30,6 +30,9 @@ export interface PlayerRow {
   neighbourhood: string;
   lat: number;
   lon: number;
+  work_neighbourhood: string;
+  work_lat: number | null;
+  work_lon: number | null;
   radius_km: number;
   classification: string | null;
   years_playing: number;
@@ -98,6 +101,9 @@ export function rowToPlayer(row: PlayerRow): Player {
     neighbourhood: row.neighbourhood ?? '',
     lat: row.lat,
     lon: row.lon,
+    workNeighbourhood: row.work_neighbourhood ?? '',
+    workLat: row.work_lat,
+    workLon: row.work_lon,
     radiusKm: row.radius_km,
     level: {
       classification: (row.classification as SwissClassification | null) ?? null,
@@ -141,6 +147,9 @@ export function playerToRow(player: Player): Omit<PlayerRow, 'created_at'> {
     neighbourhood: player.neighbourhood,
     lat: player.lat,
     lon: player.lon,
+    work_neighbourhood: player.workNeighbourhood,
+    work_lat: player.workLat,
+    work_lon: player.workLon,
     radius_km: player.radiusKm,
     classification: player.level.classification,
     years_playing: player.level.yearsPlaying,

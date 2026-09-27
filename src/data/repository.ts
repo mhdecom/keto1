@@ -27,6 +27,14 @@ export interface Repository {
   saveCurrentPlayer(player: Player): Promise<void>;
   getPlayer(playerId: string): Promise<Player | null>;
 
+  /**
+   * Takes a local image URI from the picker and returns the string to store on
+   * the profile. Locally that is the URI itself; against a real backend it is
+   * the URL of the uploaded file. Keeping it behind the repository means the
+   * picker UI never learns which one it is talking to.
+   */
+  savePhoto(localUri: string): Promise<string>;
+
   /** Everyone except the viewer, before filtering and scoring. */
   listCandidates(viewerId: string): Promise<Player[]>;
   /** Ids the viewer already liked or passed on, so they do not reappear. */

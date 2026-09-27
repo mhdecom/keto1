@@ -1,8 +1,8 @@
 import { affinity, type AffinityResult } from './affinity';
 import { availabilityCompatibility, describeSharedSlots, sharedSlots } from './availability';
-import { distanceKm, proximityScore } from './geo';
 import { AFTER_PLAY_LABELS, INDUSTRY_LABELS, INTEREST_LABELS } from './labels';
 import { estimateLevel, levelCompatibility, levelLabel } from './level';
+import { closestAnchors, describeProximity, locationFit, type ClosestAnchors } from './location';
 import { INTENSITIES, type Intensity, type Player, type Surface } from './types';
 
 /**
@@ -48,7 +48,10 @@ export interface MatchCandidate {
   /** Weighted total from 0 to 1. */
   score: number;
   breakdown: ScoreBreakdown;
+  /** Shortest hop between the two players' home/work anchors. */
   distanceKm: number;
+  /** Which anchors produced that distance, so the UI can say why. */
+  closest: ClosestAnchors;
   sharedVenueIds: string[];
   sharedSlotCount: number;
   /** Everything off the court: interests, profession, what happens afterwards. */
@@ -97,8 +100,11 @@ export function passesHardFilters(viewer: Player, other: Player, now = new Date(
   if (otherAge < viewer.ageMin || otherAge > viewer.ageMax) return false;
   if (viewerAge < other.ageMin || viewerAge > other.ageMax) return false;
 
-  // Respect the tighter of the two travel radiuses rather than averaging them.
-  const km = distanceKm(viewer, other);
+  // Respect the tighter of the two travel radiuses rather than averaging them,
+  // and measure it from whichever anchors bring the pair closest: if your
+  // office is around the corner from my flat, the distance between our homes
+  // is not what decides whether we can play.
+  const { km } = closestAnchors(viewer, other);
   if (km > Math.min(viewer.radiusKm, other.radiusKm)) return false;
 
   return true;
@@ -140,17 +146,9 @@ export function scoreCandidate(
     surface: surfaceCompatibility(viewer.surfaces, other.surfaces),
   };
 
-  const km = distanceKm(viewer, other);
-  const nearby = proximityScore(km);
-  const sharedVenueIds = viewer.venueIds.filter((id) => other.venueIds.includes(id));
-  const bothHaveVenues = viewer.venueIds.length > 0 && other.venueIds.length > 0;
-  const venueOverlap = bothHaveVenues
-    ? sharedVenueIds.length / Math.min(viewer.venueIds.length, other.venueIds.length)
-    : null;
-
-  // A shared home court beats raw proximity, but living close by still counts:
-  // it is what makes a spontaneous "court free in an hour?" realistic.
-  breakdown.location = venueOverlap === null ? nearby : venueOverlap * 0.65 + nearby * 0.35;
+  const fit = locationFit(viewer, other);
+  breakdown.location = fit.score;
+  const { closest, sharedVenueIds } = fit;
 
   const score = (Object.keys(MATCH_WEIGHTS) as MatchFactor[]).reduce(
     (total, factor) => total + MATCH_WEIGHTS[factor] * breakdown[factor],
@@ -184,8 +182,9 @@ export function scoreCandidate(
     reasons.push(
       sharedVenueIds.length === 1 ? `Beide auf ${name}` : `${sharedVenueIds.length} gemeinsame Anlagen`,
     );
-  } else if (km <= 2) {
-    reasons.push(`Nur ${km < 1 ? '<1' : km.toFixed(1)} km entfernt`);
+  } else {
+    const proximity = describeProximity(viewer, other, closest);
+    if (proximity) reasons.push(proximity);
   }
 
   // Off-court reasons come before the play formats: knowing you both ski, or
@@ -228,7 +227,8 @@ export function scoreCandidate(
     player: other,
     score,
     breakdown,
-    distanceKm: km,
+    distanceKm: closest.km,
+    closest,
     sharedVenueIds,
     sharedSlotCount: slotCount,
     offCourt,

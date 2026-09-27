@@ -142,7 +142,7 @@ function RequestCard({
     <Card>
       <Stack gap={3}>
         <Row gap={3}>
-          <Avatar name={author?.firstName ?? '?'} size={44} />
+          <Avatar name={author?.firstName ?? '?'} size={44} photo={author?.photos[0]} />
           <Stack gap={1} style={{ flex: 1 }}>
             <Row gap={2} wrap>
               <Title>{author?.firstName ?? 'Unbekannt'}</Title>

@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "Tinder Tennis",
-    "slug": "tinder-tennis",
+    "name": "It's a Match",
+    "slug": "its-a-match",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "tindertennis",
+    "scheme": "itsamatch",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "ch.tindertennis.app"
+      "bundleIdentifier": "ch.itsamatch.app"
     },
     "android": {
-      "package": "ch.tindertennis.app",
+      "package": "ch.itsamatch.app",
       "adaptiveIcon": {
         "backgroundColor": "#0B3D2C",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

@@ -1,4 +1,4 @@
--- Tinder Tennis — initial schema.
+-- It's a Match — initial schema.
 --
 -- Design notes:
 --   * The matching score is NOT computed here. It lives in src/domain/matching.ts
