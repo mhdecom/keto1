@@ -36,7 +36,15 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > Lichtbrille, Yoga und andere Habits in den Tag einbauen, einfach um sich
 > ausreichend zu bewegen.
 >
-> _(Antwort war am Ende abgeschnitten: "Ich glaube, ...")_
+> Und ich glaube, dass viele verschiedene Gewohnheiten zusammenkommen duerfen.
+> Alte, urspruengliche, wie Menschen sie schon immer getan haben, zum Beispiel
+> fermentieren. Zusammen mit Neurotech, mit sehr technischen, modernen
+> KI-Komponenten: Gesundheitsdaten auswerten, neue Stimulierungsgeraete
+> benutzen.
+>
+> Das alles kann sinnvoll sein, nicht nur im Krankenbereich, sondern auch fuer
+> Gesunde mit Fruehsymptomen, sage ich mal: Unzufriedenheit, Muedigkeit, ohne
+> dass man eine Krankheit hat.
 
 **1.3 Was aergert dich an der Art, wie ueber Psychedelika, Ernaehrung oder maennliche Gesundheit geschrieben wird?**
 
