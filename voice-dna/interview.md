@@ -185,9 +185,14 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 
 ## Block 4 — Register und Grenzen
 
-**4.1 Wo darfst du weich werden, wo hart?**
+**Frage 10 — Wo darfst du weich werden, wo hart?**
 
-> _(offen)_
+> Hart und sehr analytisch bei den wissenschaftlichen Belegen. Studien zitieren
+> und primaer interpretieren.
+>
+> Weich bei Gefuehlen, beim Erzaehlen von Geschichten, bei Dingen, die ich mit
+> Patienten im Alltag erlebe. Da moechte ich als Person ganz weich sein, weil
+> ich aus meinen Erfahrungen spreche.
 
 **4.2 Humor: ja, nein, welche Art?**
 
