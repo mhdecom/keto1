@@ -139,9 +139,23 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 
 ## Block 3 — Klang
 
-**3.1 Woerter und Wendungen, die du selbst benutzt.**
+**Frage 7 — Woerter und Wendungen, die du selbst benutzt.**
 
-> _(offen)_
+> Ich benutze relativ oft "Mann", aber eigentlich moechte ich damit nicht zu
+> viel sprechen. Sonst weiss ich gar nicht so genau, womit ich viel spreche.
+> "Ich denke, dass", "ich glaube", "ich bin der Ansicht".
+>
+> Ich nutze auch ein paar Anglizismen, weil ich viel Englisch gesprochen habe,
+> meine Ex-Freundinnen waren englischsprachig. "Enjoy", "muss das geniessen",
+> das kommt rein, wenn ich umgangssprachlich unterwegs bin.
+>
+> Vielleicht auch die eine oder andere schweizerdeutsche Silbe, oder mal
+> bayerisch.
+>
+> _Beobachtung aus diesem Interview: kurze Aussagesaetze, oft paarweise. Haeufig
+> "Das aergert mich" / "Das stoert mich" als Schlusspunkt eines Gedankens.
+> Konzessive Wendung "Das heisst nicht, dass ..., aber ...". Aufzaehlungen ohne
+> Bindewort. Korrektur im Satz statt Umformulierung._
 
 **3.2 Woerter, bei denen es dich schuettelt.**
 
