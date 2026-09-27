@@ -194,9 +194,15 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > Patienten im Alltag erlebe. Da moechte ich als Person ganz weich sein, weil
 > ich aus meinen Erfahrungen spreche.
 
-**4.2 Humor: ja, nein, welche Art?**
+**Frage 11 — Humor: ja, nein, welche Art?**
 
-> _(offen)_
+> Auf jeden Fall Humor, so viel wie geht. Ich bin nicht der Beste darin.
+>
+> Mein Humor ist neckisch, teasingartig, ein bisschen frech. Auf jeden Fall mal
+> ein Wortspiel. Oder Kontrastwitze.
+>
+> Ich bin auch offen dafuer, noch ein bisschen witziger zu sein, auch
+> artifiziell.
 
 **4.3 Worueber schreibst du nie?**
 
