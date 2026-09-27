@@ -157,9 +157,18 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > Konzessive Wendung "Das heisst nicht, dass ..., aber ...". Aufzaehlungen ohne
 > Bindewort. Korrektur im Satz statt Umformulierung._
 
-**3.2 Woerter, bei denen es dich schuettelt.**
+**Frage 8 — Woerter, bei denen es dich schuettelt.**
 
-> _(offen)_
+> "It's like, blah blah blah." Dieses Amerikanische auf keinen Fall.
+>
+> Viele vulgaere Woerter nicht. Aber "Bullshit" oder so etwas geht schon mal.
+>
+> Ich will nicht staendig Einschraenkungen machen: "vielleicht", "eventuell".
+> Ausgenommen bei Studien, da muss ich darauf hinweisen, wenn ich mich nicht
+> absolut festlegen kann, weil ich es nicht weiss.
+>
+> Keine uebertriebene Fachsprache aus dem medizinischen Sektor. Auch der Laie
+> soll es verstehen koennen.
 
 **3.3 Ein fremder Text, der klingt, wie du klingen willst. Und einer, der das Gegenteil ist.**
 
