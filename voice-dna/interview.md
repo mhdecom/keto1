@@ -204,6 +204,18 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > Ich bin auch offen dafuer, noch ein bisschen witziger zu sein, auch
 > artifiziell.
 
-**4.3 Worueber schreibst du nie?**
+**Frage 12 — Worueber schreibst du nie?**
 
-> _(offen)_
+> Kein Klatsch und Tratsch. Was Menschen machen, interessiert mich nicht in dem
+> Mass, dass ihr Fehltritt fuer mich etwas zu erzaehlen haette. Jeder hat seine
+> eigene Geschichte, und im Moment koennen sie machen, was sie wollen. Aber ich
+> will meine Lebenszeit nicht damit verschwenden, ueber das Leben von jemand
+> anderem zu lesen.
+>
+> Sonst bin ich weit interessiert. Kunst und Musik ja, Kultur etwas weniger.
+> Schreiben wuerde ich ueber vieles: Philosophie, Wissenschaft,
+> Naturwissenschaft, Physik des Universums, Realitaet, Bewusstsein, psychische
+> Gesundheit, Psychologie.
+>
+> _(Diktat sagte "Ich schreibe lieber Klatsch und Tratsch"; aus dem Zusammenhang
+> als Verneinung uebernommen.)_
