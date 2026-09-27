@@ -151,4 +151,9 @@ export function levelCompatibility(a: LevelProfile, b: LevelProfile): number {
   return Math.exp(-((delta / tolerance) ** 2));
 }
 
+/** Strength value for a classification, used to express level windows. */
+export function classificationStrength(classification: SwissClassification): number {
+  return CLASSIFICATION_STRENGTH[classification];
+}
+
 export const LEVEL_INTERNALS = { CLASSIFICATION_STRENGTH, RALLY_BASE, INTERCLUB_BONUS };
