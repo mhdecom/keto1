@@ -219,3 +219,10 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 >
 > _(Diktat sagte "Ich schreibe lieber Klatsch und Tratsch"; aus dem Zusammenhang
 > als Verneinung uebernommen.)_
+
+---
+
+## Block 5 — Herkunft und Biografie
+
+_Das Interview laeuft auf 100 Fragen. Ab hier fortlaufend nummeriert._
+
