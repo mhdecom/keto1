@@ -122,9 +122,18 @@ LinkedIn, Veroeffentlichungsrhythmus, Reichweitendaten Stand 13.09.2026.
 > bei psychischen Erkrankungen wirklich hilft. Bei anderen Dingen, Diabetes,
 > wissen wir es schon sehr gut.
 
-**2.3 Was bei den Retreats immer wieder passiert, womit Aussenstehende nicht rechnen.**
+**Frage 6 — Was bei den Retreats immer wieder passiert, womit Aussenstehende nicht rechnen.**
 
-> _(offen)_
+> Wir brechen oft in Lachen aus in der Gruppe. Wir albern gemeinsam herum. Wir
+> sitzen am Tisch, und es ergeben sich intensive philosophische Diskussionen.
+> Wir teilen sehr offen, was in unserem Leben los ist.
+>
+> Schon nach kurzer Zeit kommen die Gruppenteilnehmer zusammen und erzaehlen
+> Dinge, die sie auch den besten Freunden nicht erzaehlen wuerden. Es besteht
+> eine enge Gemeinschaft, aber auf sehr natuerliche Art und Weise.
+>
+> Wir nehmen nicht nur Drogen. Wir machen ganz viele Dinge drumherum, um ein
+> gesundes Leben zu fuehren.
 
 ---
 
