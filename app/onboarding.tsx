@@ -102,7 +102,7 @@ const STEPS: Step[] = [
 export default function Onboarding() {
   const theme = useTheme();
   const router = useRouter();
-  const { saveMe } = useSession();
+  const { saveMe, user, signOut } = useSession();
 
   const [started, setStarted] = useState(false);
   const [index, setIndex] = useState(0);
@@ -118,7 +118,9 @@ export default function Onboarding() {
   const finish = async (draft: ProfileForm) => {
     setSaving(true);
     try {
-      await saveMe(playerFromForm(draft, { id: 'me' }));
+      // saveMe stamps the account id onto the profile; the placeholder here is
+      // never the one that gets stored.
+      await saveMe(playerFromForm(draft, { id: user?.id ?? 'pending' }));
       router.replace('/(tabs)');
     } finally {
       setSaving(false);
@@ -177,6 +179,7 @@ export default function Onboarding() {
               siehst du direkt, wie das Matching arbeitet. Du kannst es später jederzeit
               überschreiben.
             </Caption>
+            <Button label="Abmelden" variant="ghost" onPress={() => void signOut()} />
           </Stack>
         </Stack>
       </Screen>

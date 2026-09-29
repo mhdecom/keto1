@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert, Linking, View } from 'react-native';
 import { PhotoPicker } from '../../src/components/PhotoPicker';
 import { SlotGrid } from '../../src/components/SlotGrid';
 import {
@@ -48,6 +48,9 @@ import { formFromPlayer, playerFromForm, validateStep, type ProfileForm } from '
 import { useSession } from '../../src/state/session';
 import { useTheme } from '../../src/theme';
 
+const SUPPORT_EMAIL = 'hilfe@itsamatch.ch';
+const PRIVACY_URL = 'https://itsamatch.ch/datenschutz';
+
 const WORK_DISTRICT_OPTIONS = [
   { value: '', label: 'Kein fester Arbeitsort' },
   ...DISTRICT_OPTIONS,
@@ -61,7 +64,7 @@ const CLASSIFICATION_OPTIONS = [
 export default function Profile() {
   const theme = useTheme();
   const router = useRouter();
-  const { me, saveMe, resetEverything } = useSession();
+  const { me, user, saveMe, signOut, deleteAccount, blockedIds } = useSession();
 
   const [form, setForm] = useState<ProfileForm | null>(null);
   const [saving, setSaving] = useState(false);
@@ -95,18 +98,43 @@ export default function Profile() {
     }
   };
 
-  const confirmReset = () => {
+  const confirmSignOut = () => {
+    Alert.alert('Abmelden?', 'Du kannst dich jederzeit wieder anmelden.', [
+      { text: 'Abbrechen', style: 'cancel' },
+      { text: 'Abmelden', onPress: () => void signOut().then(() => router.replace('/sign-in')) },
+    ]);
+  };
+
+  /**
+   * Account deletion, required by App Store Guideline 5.1.1(v).
+   *
+   * Two taps, not one, and the second one spells out what disappears. A single
+   * destructive button next to "Abmelden" is a mis-tap waiting to happen.
+   */
+  const confirmDelete = () => {
     Alert.alert(
-      'Alles zurücksetzen?',
-      'Profil, Swipes, Matches und Chats werden gelöscht. Das lässt sich nicht widerrufen.',
+      'Konto endgültig löschen?',
+      'Profil, Bilder, Swipes, Matches und Chats werden gelöscht. Das lässt sich nicht widerrufen.',
       [
         { text: 'Abbrechen', style: 'cancel' },
         {
-          text: 'Zurücksetzen',
+          text: 'Weiter',
           style: 'destructive',
-          onPress: () => {
-            void resetEverything().then(() => router.replace('/onboarding'));
-          },
+          onPress: () =>
+            Alert.alert(
+              'Wirklich löschen?',
+              'Danach ist nichts davon wiederherstellbar.',
+              [
+                { text: 'Abbrechen', style: 'cancel' },
+                {
+                  text: 'Konto löschen',
+                  style: 'destructive',
+                  onPress: () => {
+                    void deleteAccount().then(() => router.replace('/sign-in'));
+                  },
+                },
+              ],
+            ),
         },
       ],
     );
@@ -172,15 +200,38 @@ export default function Profile() {
 
           <Button label="Profil bearbeiten" onPress={() => setForm(formFromPlayer(me))} />
 
+          <Stack gap={3}>
+            <Label>Sicherheit</Label>
+            <Caption tone="muted">
+              {blockedIds.length === 0
+                ? 'Du hast niemanden blockiert. Melden und Blockieren findest du auf jedem Profil und in jedem Chat.'
+                : `${blockedIds.length} ${
+                    blockedIds.length === 1 ? 'Person' : 'Personen'
+                  } blockiert. Sie sehen dich nicht mehr, und du sie nicht.`}
+            </Caption>
+            <Caption tone="muted" onPress={() => void Linking.openURL(`mailto:${SUPPORT_EMAIL}`)}>
+              Problem melden: {SUPPORT_EMAIL}
+            </Caption>
+            <Caption tone="muted" onPress={() => void Linking.openURL(PRIVACY_URL)}>
+              Datenschutzerklärung
+            </Caption>
+          </Stack>
+
           <Stack gap={2}>
-            <Caption tone="muted">Datenquelle: {backendName}</Caption>
+            <Caption tone="muted">
+              Datenquelle: {backendName}
+              {user?.isGuest ? ' · Gastzugang' : user?.email ? ` · ${user.email}` : ''}
+            </Caption>
             <Caption tone="muted">
               Ohne Supabase-Zugangsdaten läuft alles lokal auf dem Gerät, mit Zürcher
               Testprofilen. Das Backend-Schema liegt in supabase/migrations bereit.
             </Caption>
           </Stack>
 
-          <Button label="Alles zurücksetzen" variant="danger" onPress={confirmReset} />
+          <Stack gap={2}>
+            <Button label="Abmelden" variant="secondary" onPress={confirmSignOut} />
+            <Button label="Konto löschen" variant="danger" onPress={confirmDelete} />
+          </Stack>
           <View style={{ height: theme.spacing(6) }} />
         </Stack>
       </Screen>

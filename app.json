@@ -9,7 +9,13 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "ch.itsamatch.app"
+      "bundleIdentifier": "ch.itsamatch.app",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Wähle Bilder für dein Profil, damit andere einschätzen können, mit wem sie spielen.",
+        "NSCameraUsageDescription": "Nimm ein Profilbild direkt mit der Kamera auf.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "ch.itsamatch.app",
@@ -19,7 +25,10 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.READ_MEDIA_IMAGES"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -28,17 +37,34 @@
     },
     "plugins": [
       "expo-router",
+      "expo-apple-authentication",
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
           "resizeMode": "contain",
-          "backgroundColor": "#0B3D2C"
+          "backgroundColor": "#0B3D2C",
+          "dark": {
+            "backgroundColor": "#0B3D2C"
+          }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Wähle Bilder für dein Profil, damit andere einschätzen können, mit wem sie spielen.",
+          "cameraPermission": "Nimm ein Profilbild direkt mit der Kamera auf."
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_EAS_INIT"
+      }
+    },
+    "owner": "REPLACE_WITH_EXPO_ACCOUNT"
   }
 }

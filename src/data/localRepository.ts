@@ -3,6 +3,8 @@ import type {
   Message,
   Player,
   PlayRequest,
+  Report,
+  ReportReason,
   Swipe,
   SwipeDirection,
 } from '../domain/types';
@@ -16,6 +18,8 @@ const KEYS = {
   matches: 'tt:matches',
   messages: 'tt:messages',
   requests: 'tt:requests',
+  blocks: 'tt:blocks',
+  reports: 'tt:reports',
 } as const;
 
 let idCounter = 0;
@@ -70,7 +74,49 @@ export class LocalRepository implements Repository {
   }
 
   async listCandidates(viewerId: string): Promise<Player[]> {
-    return SEED_PLAYERS.filter((player) => player.id !== viewerId);
+    const blocked = new Set(await this.listBlockedPlayerIds(viewerId));
+    return SEED_PLAYERS.filter((player) => player.id !== viewerId && !blocked.has(player.id));
+  }
+
+  // --- Safety ---------------------------------------------------------------
+
+  async listBlockedPlayerIds(viewerId: string): Promise<string[]> {
+    const all = await this.read<Record<string, string[]>>(KEYS.blocks, {});
+    return all[viewerId] ?? [];
+  }
+
+  async blockPlayer(viewerId: string, targetId: string): Promise<void> {
+    const all = await this.read<Record<string, string[]>>(KEYS.blocks, {});
+    const current = all[viewerId] ?? [];
+    if (current.includes(targetId)) return;
+    await this.write(KEYS.blocks, { ...all, [viewerId]: [...current, targetId] });
+  }
+
+  async reportPlayer(
+    viewerId: string,
+    targetId: string,
+    reason: ReportReason,
+    detail: string,
+  ): Promise<void> {
+    const reports = await this.read<Report[]>(KEYS.reports, []);
+    await this.write(KEYS.reports, [
+      ...reports,
+      {
+        id: newId('report'),
+        reporterId: viewerId,
+        reportedId: targetId,
+        reason,
+        detail,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+  }
+
+  async deleteAccountData(playerId: string): Promise<void> {
+    // Locally there is only one account, so this is the same as a full wipe —
+    // but it is kept separate so the two intentions do not get confused.
+    void playerId;
+    await this.reset();
   }
 
   private async listSwipes(): Promise<Swipe[]> {
@@ -156,8 +202,13 @@ export class LocalRepository implements Repository {
 
   async listMatches(playerId: string): Promise<Match[]> {
     const matches = await this.listAllMatches();
+    const blocked = new Set(await this.listBlockedPlayerIds(playerId));
     return matches
-      .filter((match) => match.playerIds.includes(playerId))
+      .filter(
+        (match) =>
+          match.playerIds.includes(playerId) &&
+          !match.playerIds.some((id) => blocked.has(id)),
+      )
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 

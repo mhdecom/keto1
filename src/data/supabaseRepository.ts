@@ -4,6 +4,7 @@ import type {
   Message,
   Player,
   PlayRequest,
+  ReportReason,
   SwipeDirection,
 } from '../domain/types';
 import type { NewPlayRequest, Repository } from './repository';
@@ -181,6 +182,46 @@ export class SupabaseRepository implements Repository {
     const { error } = await this.client
       .from('play_request_responses')
       .upsert({ request_id: requestId, player_id: playerId });
+    if (error) throw new Error(error.message);
+  }
+
+  // --- Safety ---------------------------------------------------------------
+
+  async listBlockedPlayerIds(viewerId: string): Promise<string[]> {
+    const { data, error } = await this.client
+      .from('blocks')
+      .select('blocked_id')
+      .eq('blocker_id', viewerId);
+    if (error) throw new Error(error.message);
+    return ((data ?? []) as Array<{ blocked_id: string }>).map((row) => row.blocked_id);
+  }
+
+  async blockPlayer(viewerId: string, targetId: string): Promise<void> {
+    // A block also tears down the match, so the thread disappears for both
+    // sides rather than sitting there unanswered.
+    const { error } = await this.client.rpc('block_player', { target: targetId });
+    if (error) throw new Error(error.message);
+    void viewerId;
+  }
+
+  async reportPlayer(
+    viewerId: string,
+    targetId: string,
+    reason: ReportReason,
+    detail: string,
+  ): Promise<void> {
+    const { error } = await this.client.from('reports').insert({
+      reporter_id: viewerId,
+      reported_id: targetId,
+      reason,
+      detail,
+    });
+    if (error) throw new Error(error.message);
+  }
+
+  async deleteAccountData(playerId: string): Promise<void> {
+    void playerId;
+    const { error } = await this.client.rpc('delete_own_account');
     if (error) throw new Error(error.message);
   }
 

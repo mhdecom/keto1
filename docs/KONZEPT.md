@@ -239,24 +239,29 @@ Partner bucht keinen Platz.
 ## 7. Stand und nächste Schritte
 
 **Steht:**
-Domain-Logik mit 135 Tests · Onboarding-Wizard in neun Schritten · Fotos mit
-Initialen-Fallback · Swipe-Deck mit Begründungen · Beruf, Interessen und «nach
-dem Spiel» als eigener Matching-Faktor · Wohn- und Arbeitsort als zwei
-Ortsanker · Match und Chat · Anfragen-Feed · bearbeitbares Profil ·
-Supabase-Schema mit RLS und Storage-Policies · Buchungs-Adapter · Light- und
-Dark-Mode.
+Domain-Logik mit 149 Tests · Anmeldung mit Apple und E-Mail-Code ·
+Onboarding-Wizard in neun Schritten · Fotos mit Initialen-Fallback ·
+Swipe-Deck mit Begründungen · Beruf, Interessen und «nach dem Spiel» als
+eigener Matching-Faktor · Wohn- und Arbeitsort als zwei Ortsanker · Match und
+Chat · Anfragen-Feed · bearbeitbares Profil · Melden, Blockieren und
+Kontolöschung · Moderations-Warteschlange für Bilder · Supabase-Schema mit RLS
+und Storage-Policies · App-Icon · Buchungs-Adapter · Light- und Dark-Mode.
 
 **Als Nächstes, in dieser Reihenfolge:**
 
-1. **Auth und Supabase scharf schalten.** Schema und Repository liegen bereit;
-   es fehlen die Login-Screens (Apple, Google, Magic Link) und das Anlegen der
-   Profilzeile nach der Registrierung.
-2. **Foto-Moderation.** Der Upload steht, inklusive Storage-Policies, die nur
-   Schreibzugriff im eigenen Ordner erlauben. Was fehlt, ist die Prüfung der
-   Inhalte — bei einer App mit Dating-Anteil ist das keine Kür.
+1. **TestFlight.** Der Weg dorthin steht Schritt für Schritt in
+   `docs/TESTFLIGHT.md`. Für interne Tester braucht es keine Review — zwanzig
+   Leute aus dem Tennisumfeld einladen und zuschauen.
+2. **Datenschutzerklärung veröffentlichen.** Der Entwurf liegt in
+   `docs/DATENSCHUTZ.md` und beschreibt, was die App tatsächlich erhebt. Er
+   braucht die Firmendaten und einen juristischen Blick, dann muss er unter
+   einer öffentlichen URL stehen — Apple verlangt sie als Pflichtfeld.
 3. **Push-Benachrichtigungen** für Matches, Nachrichten und passende Anfragen.
    Ohne Push stirbt der Anfragen-Feed an Latenz.
-4. **Melden und Blockieren im UI** (Backend steht).
+4. **Automatische Bild-Vorprüfung.** Die Warteschlange steht und trägt bereits
+   die Spalten `auto_verdict` und `auto_score`; es fehlt die Entscheidung für
+   einen Klassifizierer. Bis dahin ist die Prüfung nachgelagert und manuell,
+   was bei dieser Grösse ehrlich und tragfähig ist.
 5. **Eversports-Partnergespräch** und Stufe 2 der Buchung.
 6. **Beta in Zürich**, am besten über zwei, drei Anlagen und einen Club gestartet
    — eine Matching-App wird nicht stadtweit lanciert, sondern dort, wo die

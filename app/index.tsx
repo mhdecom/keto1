@@ -3,9 +3,14 @@ import React from 'react';
 import { Loading } from '../src/components/ui';
 import { useSession } from '../src/state/session';
 
-/** Gate: straight to the deck if a profile exists, otherwise onboarding. */
+/**
+ * Gate: sign in, then build a profile, then the deck. Kept in one place so the
+ * three states cannot contradict each other.
+ */
 export default function Index() {
-  const { ready, me } = useSession();
-  if (!ready) return <Loading label="Lade Profil…" />;
-  return <Redirect href={me ? '/(tabs)' : '/onboarding'} />;
+  const { ready, user, me } = useSession();
+  if (!ready) return <Loading label="Moment…" />;
+  if (!user) return <Redirect href="/sign-in" />;
+  if (!me) return <Redirect href="/onboarding" />;
+  return <Redirect href="/(tabs)" />;
 }

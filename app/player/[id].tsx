@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, Linking, Pressable, ScrollView } from 'react-native';
 import { photoSource } from '../../src/data/photos';
@@ -7,6 +7,7 @@ import {
   Avatar,
   Badge,
   Body,
+  Button,
   Caption,
   Card,
   Chip,
@@ -44,6 +45,7 @@ const GALLERY_HEIGHT = Math.round(GALLERY_WIDTH * 0.85);
 export default function PlayerDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { repository, me } = useSession();
+  const router = useRouter();
   const [player, setPlayer] = useState<Player | null | undefined>(undefined);
 
   useEffect(() => {
@@ -256,6 +258,14 @@ export default function PlayerDetail() {
               <Chip key={language} label={language.toUpperCase()} />
             ))}
           </Row>
+        </Stack>
+
+        <Stack gap={2}>
+          <Button
+            label="Melden oder blockieren"
+            variant="ghost"
+            onPress={() => router.push(`/report/${player.id}`)}
+          />
         </Stack>
       </Stack>
     </Screen>

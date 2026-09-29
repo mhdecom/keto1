@@ -9,6 +9,7 @@ import {
   INTERCLUB_LEVELS,
   PLAY_FORMATS,
   RALLY_CONSISTENCY,
+  REPORT_REASONS,
   SKILLS,
   SURFACES,
   type AfterPlay,
@@ -21,6 +22,7 @@ import {
   type InterclubLevel,
   type PlayFormat,
   type RallyConsistency,
+  type ReportReason,
   type Skill,
   type Surface,
 } from './types';
@@ -157,6 +159,15 @@ export const AFTER_PLAY_HINTS: Record<AfterPlay, string> = {
   networking: 'Offen dafür, dass beruflich etwas daraus entsteht.',
 };
 
+export const REPORT_REASON_LABELS: Record<ReportReason, string> = {
+  harassment: 'Belästigung oder Beleidigung',
+  fakeProfile: 'Gefälschtes Profil',
+  inappropriatePhotos: 'Unangemessene Bilder',
+  noShow: 'Nicht erschienen',
+  underage: 'Vermutlich minderjährig',
+  other: 'Anderes',
+};
+
 export const GENDER_LABELS: Record<Gender, string> = {
   female: 'Frau',
   male: 'Mann',
@@ -185,4 +196,5 @@ export const GENDER_OPTIONS = options(GENDERS, GENDER_LABELS);
 export const INDUSTRY_OPTIONS = options(INDUSTRIES, INDUSTRY_LABELS);
 export const INTEREST_OPTIONS = options(INTERESTS, INTEREST_LABELS);
 export const AFTER_PLAY_OPTIONS = options(AFTER_PLAY, AFTER_PLAY_LABELS);
+export const REPORT_REASON_OPTIONS = options(REPORT_REASONS, REPORT_REASON_LABELS);
 export const SEEKING_OPTIONS = options(GENDERS, SEEKING_LABELS);

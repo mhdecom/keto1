@@ -314,6 +314,33 @@ export interface Message {
 }
 
 // ---------------------------------------------------------------------------
+// Safety
+//
+// Not optional extras. An app that gets strangers to meet in person needs both
+// reporting and blocking, and the App Store review guidelines require them
+// explicitly for user-generated content.
+// ---------------------------------------------------------------------------
+
+export const REPORT_REASONS = [
+  'harassment',
+  'fakeProfile',
+  'inappropriatePhotos',
+  'noShow',
+  'underage',
+  'other',
+] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+
+export interface Report {
+  id: string;
+  reporterId: string;
+  reportedId: string;
+  reason: ReportReason;
+  detail: string;
+  createdAt: string;
+}
+
+// ---------------------------------------------------------------------------
 // Open play requests — the cold start answer
 // ---------------------------------------------------------------------------
 

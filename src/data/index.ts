@@ -5,7 +5,7 @@ import type { KeyValueStore } from './store';
 import { getSupabase, isSupabaseConfigured } from './supabaseClient';
 import { SupabaseRepository } from './supabaseRepository';
 
-const asyncStorageStore: KeyValueStore = {
+export const keyValueStore: KeyValueStore = {
   get: (key) => AsyncStorage.getItem(key),
   set: (key, value) => AsyncStorage.setItem(key, value),
   remove: (key) => AsyncStorage.removeItem(key),
@@ -22,7 +22,7 @@ export function getRepository(): Repository {
   if (!cached) {
     cached = isSupabaseConfigured
       ? new SupabaseRepository(getSupabase())
-      : new LocalRepository(asyncStorageStore);
+      : new LocalRepository(keyValueStore);
   }
   return cached;
 }

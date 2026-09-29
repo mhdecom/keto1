@@ -207,6 +207,73 @@ describe('LocalRepository — play requests', () => {
   });
 });
 
+describe('LocalRepository — blocking and reporting', () => {
+  let repo: LocalRepository;
+
+  beforeEach(async () => {
+    repo = makeRepo();
+    await repo.saveCurrentPlayer(DEMO_ME);
+  });
+
+  it('starts with nobody blocked', async () => {
+    expect(await repo.listBlockedPlayerIds('me')).toEqual([]);
+  });
+
+  it('removes a blocked player from the candidate pool', async () => {
+    const before = await repo.listCandidates('me');
+    await repo.blockPlayer('me', 'p-marco');
+    const after = await repo.listCandidates('me');
+
+    expect(before.map((p) => p.id)).toContain('p-marco');
+    expect(after.map((p) => p.id)).not.toContain('p-marco');
+    expect(after).toHaveLength(before.length - 1);
+  });
+
+  it('is idempotent', async () => {
+    await repo.blockPlayer('me', 'p-marco');
+    await repo.blockPlayer('me', 'p-marco');
+    expect(await repo.listBlockedPlayerIds('me')).toEqual(['p-marco']);
+  });
+
+  it('keeps blocks separate per player', async () => {
+    await repo.blockPlayer('me', 'p-marco');
+    expect(await repo.listBlockedPlayerIds('p-lena')).toEqual([]);
+  });
+
+  it('hides an existing match with a blocked player', async () => {
+    // Like everyone, then block whoever matched back.
+    for (const player of SEED_PLAYERS) {
+      await repo.recordSwipe('me', player.id, 'like');
+    }
+    const before = await repo.listMatches('me');
+    expect(before.length).toBeGreaterThan(0);
+
+    const victim = before[0].playerIds.find((id) => id !== 'me') as string;
+    await repo.blockPlayer('me', victim);
+
+    const after = await repo.listMatches('me');
+    expect(after).toHaveLength(before.length - 1);
+    expect(after.some((m) => m.playerIds.includes(victim))).toBe(false);
+  });
+
+  it('records a report without needing a block', async () => {
+    await repo.reportPlayer('me', 'p-marco', 'harassment', 'Unangemessene Nachrichten');
+    // Reporting alone must not hide the profile; the UI blocks separately.
+    expect(await repo.listBlockedPlayerIds('me')).toEqual([]);
+  });
+
+  it('wipes everything when the account is deleted', async () => {
+    await repo.recordSwipe('me', 'p-marco', 'like');
+    await repo.sendMessage('match-a', 'me', 'Hallo');
+    await repo.deleteAccountData('me');
+
+    expect(await repo.getCurrentPlayer()).toBeNull();
+    expect(await repo.listSwipedPlayerIds('me')).toHaveLength(0);
+    expect(await repo.listMatches('me')).toHaveLength(0);
+    expect(await repo.listMessages('match-a')).toHaveLength(0);
+  });
+});
+
 describe('LocalRepository — reset', () => {
   it('clears profile, swipes, matches and messages', async () => {
     const repo = makeRepo();

@@ -7,9 +7,10 @@ import { useTheme } from '../../src/theme';
 
 export default function TabsLayout() {
   const theme = useTheme();
-  const { ready, me, matches } = useSession();
+  const { ready, user, me, matches } = useSession();
 
   if (!ready) return <Loading />;
+  if (!user) return <Redirect href="/sign-in" />;
   if (!me) return <Redirect href="/onboarding" />;
 
   return (

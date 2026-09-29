@@ -6,10 +6,17 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { getRepository } from '../data';
+import { getRepository, keyValueStore } from '../data';
+import { getAuth, type AuthUser } from '../data/auth';
 import type { NewPlayRequest, Repository } from '../data/repository';
 import { buildDeck, type MatchCandidate } from '../domain/matching';
-import type { Match, Player, PlayRequest, SwipeDirection } from '../domain/types';
+import type {
+  Match,
+  Player,
+  PlayRequest,
+  ReportReason,
+  SwipeDirection,
+} from '../domain/types';
 import { VENUE_NAMES } from '../domain/venues';
 
 export interface MatchWithPlayer {
@@ -18,10 +25,19 @@ export interface MatchWithPlayer {
 }
 
 interface SessionValue {
-  /** False until the stored profile has been read. */
+  /** False until the session and any stored profile have been read. */
   ready: boolean;
+  /** The signed-in account, or null when nobody is signed in. */
+  user: AuthUser | null;
+  auth: ReturnType<typeof getAuth>;
   me: Player | null;
   repository: Repository;
+
+  /** Re-reads the session after a sign-in screen completes. */
+  refreshUser: () => Promise<void>;
+  signOut: () => Promise<void>;
+  /** Removes the account and everything attached to it, irreversibly. */
+  deleteAccount: () => Promise<void>;
 
   saveMe: (player: Player) => Promise<void>;
 
@@ -38,6 +54,10 @@ interface SessionValue {
   createRequest: (request: NewPlayRequest) => Promise<void>;
   respondToRequest: (requestId: string) => Promise<void>;
 
+  blockedIds: string[];
+  blockPlayer: (targetId: string) => Promise<void>;
+  reportPlayer: (targetId: string, reason: ReportReason, detail: string) => Promise<void>;
+
   resetEverything: () => Promise<void>;
 }
 
@@ -45,27 +65,36 @@ const SessionContext = createContext<SessionValue | null>(null);
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const repository = useMemo(() => getRepository(), []);
+  const auth = useMemo(() => getAuth(keyValueStore), []);
 
   const [ready, setReady] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [me, setMe] = useState<Player | null>(null);
+  const [blockedIds, setBlockedIds] = useState<string[]>([]);
   const [deck, setDeck] = useState<MatchCandidate[]>([]);
   const [deckLoading, setDeckLoading] = useState(false);
   const [matches, setMatches] = useState<MatchWithPlayer[]>([]);
   const [requests, setRequests] = useState<PlayRequest[]>([]);
 
+  const loadSession = useCallback(async () => {
+    const signedIn = await auth.current();
+    setUser(signedIn);
+    // No account means no profile: the two must never drift apart, or a signed
+    // out device would still show the last person's deck.
+    setMe(signedIn ? await repository.getCurrentPlayer() : null);
+    setBlockedIds(signedIn ? await repository.listBlockedPlayerIds(signedIn.id) : []);
+  }, [auth, repository]);
+
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const stored = await repository.getCurrentPlayer();
-      if (!cancelled) {
-        setMe(stored);
-        setReady(true);
-      }
+      await loadSession();
+      if (!cancelled) setReady(true);
     })();
     return () => {
       cancelled = true;
     };
-  }, [repository]);
+  }, [loadSession]);
 
   const reloadDeck = useCallback(async () => {
     if (!me) {
@@ -74,13 +103,14 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     }
     setDeckLoading(true);
     try {
-      const [candidates, swiped] = await Promise.all([
+      const [candidates, swiped, blocked] = await Promise.all([
         repository.listCandidates(me.id),
         repository.listSwipedPlayerIds(me.id),
+        repository.listBlockedPlayerIds(me.id),
       ]);
       setDeck(
         buildDeck(me, candidates, {
-          excludePlayerIds: swiped,
+          excludePlayerIds: [...swiped, ...blocked],
           venueNames: VENUE_NAMES,
         }),
       );
@@ -122,10 +152,58 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const saveMe = useCallback(
     async (player: Player) => {
-      await repository.saveCurrentPlayer(player);
-      setMe(player);
+      if (!user) throw new Error('Nicht angemeldet');
+      // The profile id is always the account id. Letting a caller pass its own
+      // would be the kind of mismatch that silently breaks matching later.
+      const owned = { ...player, id: user.id };
+      await repository.saveCurrentPlayer(owned);
+      setMe(owned);
     },
-    [repository],
+    [repository, user],
+  );
+
+  const refreshUser = useCallback(async () => {
+    await loadSession();
+  }, [loadSession]);
+
+  const signOut = useCallback(async () => {
+    await auth.signOut();
+    setUser(null);
+    setMe(null);
+    setDeck([]);
+    setMatches([]);
+    setBlockedIds([]);
+  }, [auth]);
+
+  const deleteAccount = useCallback(async () => {
+    if (user) await repository.deleteAccountData(user.id);
+    await auth.deleteAccount();
+    setUser(null);
+    setMe(null);
+    setDeck([]);
+    setMatches([]);
+    setBlockedIds([]);
+  }, [auth, repository, user]);
+
+  const blockPlayer = useCallback(
+    async (targetId: string) => {
+      if (!me) return;
+      await repository.blockPlayer(me.id, targetId);
+      setBlockedIds(await repository.listBlockedPlayerIds(me.id));
+      setDeck((current) => current.filter((entry) => entry.player.id !== targetId));
+      setMatches((current) =>
+        current.filter((entry) => !entry.match.playerIds.includes(targetId)),
+      );
+    },
+    [me, repository],
+  );
+
+  const reportPlayer = useCallback(
+    async (targetId: string, reason: ReportReason, detail: string) => {
+      if (!me) return;
+      await repository.reportPlayer(me.id, targetId, reason, detail);
+    },
+    [me, repository],
   );
 
   const swipe = useCallback(
@@ -161,17 +239,25 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const resetEverything = useCallback(async () => {
     await repository.reset();
+    await auth.signOut();
+    setUser(null);
     setMe(null);
     setDeck([]);
     setMatches([]);
+    setBlockedIds([]);
     await reloadRequests();
-  }, [reloadRequests, repository]);
+  }, [auth, reloadRequests, repository]);
 
   const value = useMemo<SessionValue>(
     () => ({
       ready,
+      user,
+      auth,
       me,
       repository,
+      refreshUser,
+      signOut,
+      deleteAccount,
       saveMe,
       deck,
       deckLoading,
@@ -183,24 +269,35 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       reloadRequests,
       createRequest,
       respondToRequest,
+      blockedIds,
+      blockPlayer,
+      reportPlayer,
       resetEverything,
     }),
     [
+      auth,
+      blockPlayer,
+      blockedIds,
       createRequest,
       deck,
       deckLoading,
+      deleteAccount,
       matches,
       me,
       ready,
+      refreshUser,
       reloadDeck,
       reloadMatches,
       reloadRequests,
+      reportPlayer,
       repository,
       requests,
       respondToRequest,
       resetEverything,
       saveMe,
+      signOut,
       swipe,
+      user,
     ],
   );
 

@@ -21,6 +21,7 @@ function Navigator() {
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="match/[id]" options={{ title: 'Chat' }} />
@@ -28,6 +29,10 @@ function Navigator() {
         <Stack.Screen
           name="request/new"
           options={{ title: 'Anfrage aufgeben', presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name="report/[id]"
+          options={{ title: 'Melden', presentation: 'modal' }}
         />
       </Stack>
     </>

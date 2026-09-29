@@ -206,14 +206,26 @@ export function Caption({
   children,
   tone = 'muted',
   style,
+  onPress,
 }: {
   children: React.ReactNode;
   tone?: TextTone;
   style?: StyleProp<TextStyle>;
+  onPress?: () => void;
 }) {
   const theme = useTheme();
   return (
-    <Text style={[{ fontSize: theme.font.small, color: toneColor(theme, tone) }, style]}>{children}</Text>
+    <Text
+      onPress={onPress}
+      accessibilityRole={onPress ? 'link' : undefined}
+      style={[
+        { fontSize: theme.font.small, color: toneColor(theme, onPress ? 'accent' : tone) },
+        onPress ? { textDecorationLine: 'underline' } : null,
+        style,
+      ]}
+    >
+      {children}
+    </Text>
   );
 }
 

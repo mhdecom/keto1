@@ -97,6 +97,14 @@ export default function Chat() {
           </Row>
         </Pressable>
 
+        <Pressable
+          onPress={() => router.push(`/report/${other.id}`)}
+          accessibilityRole="button"
+          style={{ position: 'absolute', right: theme.spacing(5), top: theme.spacing(3) }}
+        >
+          <Caption tone="muted">Melden</Caption>
+        </Pressable>
+
         {sharedVenueIds.length > 0 ? (
           <Stack gap={2}>
             <Label>Gemeinsame Anlagen</Label>

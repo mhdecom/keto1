@@ -22,11 +22,16 @@ Die App läuft **ohne Backend**: ohne Supabase-Zugangsdaten nutzt sie das lokale
 Repository mit 15 Zürcher Testprofilen und vier offenen Anfragen. Swipen,
 Matchen und Chatten funktionieren vollständig, nur eben auf dem Gerät.
 
-Auf dem Startbildschirm führt «Mit Demo-Profil ansehen» direkt ins Deck, ohne
-den Wizard auszufüllen.
+«Ohne Konto ansehen» auf dem Anmeldebildschirm und dann «Mit Demo-Profil
+ansehen» führt direkt ins Deck, ohne den Wizard auszufüllen.
+
+Mit Supabase gibt es echte Anmeldung — **Anmelden mit Apple** und
+**E-Mail-Code**. Kein Google: Apples Richtlinie 4.8 verlangt Sign in with Apple,
+sobald ein anderer Drittanbieter-Login dabei ist, und Apple plus E-Mail umgeht
+das ganz, braucht keine OAuth-Registrierung und funktioniert auch auf Android.
 
 ```bash
-npm test           # 135 Unit-Tests (Vitest)
+npm test           # 149 Unit-Tests (Vitest)
 npm run typecheck  # tsc --noEmit
 ```
 
@@ -43,11 +48,13 @@ npm run typecheck  # tsc --noEmit
 
 ```
 app/                    Screens (expo-router, dateibasiertes Routing)
+  sign-in.tsx           Apple, E-Mail-Code, Gastzugang
   onboarding.tsx        Profil-Wizard in neun Schritten
   (tabs)/               Entdecken · Anfragen · Matches · Profil
   match/[id].tsx        Chat samt Buchungs-Links für gemeinsame Anlagen
   player/[id].tsx       Vollprofil mit aufgeschlüsseltem Score
   request/new.tsx       Offene Anfrage aufgeben
+  report/[id].tsx       Melden und Blockieren
 
 src/domain/             Reines TypeScript, keine RN- oder Supabase-Importe
   level.ts              Klassierung und Selbsteinschätzung → Stärkeskala 0–100
@@ -59,7 +66,9 @@ src/domain/             Reines TypeScript, keine RN- oder Supabase-Importe
   venues.ts             Die Zürcher Anlagen
   geo.ts                Haversine-Distanz
 
-src/data/               Repository-Interface + zwei Implementierungen
+src/data/               Repository- und Auth-Interface, je zwei Implementierungen
+  authTypes.ts          Auth-Vertrag, frei von Plattform-Importen
+  localAuth.ts          Gast-Identität für den Demo-Modus
   localRepository.ts    Offline, mit Seed-Daten
   supabaseRepository.ts Gegen das SQL-Schema
 
@@ -68,6 +77,9 @@ src/components/         UI-Primitive, Wochenraster, Spielerkarte, Swipe-Deck
 supabase/migrations/    Schema inklusive Row-Level-Security
                         0001 Basis · 0002 Beruf, Interessen, nach dem Spiel
                         0003 Fotos (Storage + Policies) und Arbeitsort
+                        0004 Kontolöschung, Blockieren, Bild-Moderation
+store/                  Screenshots und Store-Texte
+tools/make_icon.py      Erzeugt den kompletten Icon-Satz
 ```
 
 Die Domain-Schicht ist absichtlich frei von React Native und Supabase. Deshalb
@@ -88,18 +100,27 @@ die Funktionen `discover_candidates()` und `record_swipe()` mit.
 ohne Auth-Flow legt niemand eine Profilzeile an — das ist der erste Schritt in
 `docs/KONZEPT.md`, Abschnitt 7.
 
+## Zum Store
+
+`docs/TESTFLIGHT.md` führt Schritt für Schritt von hier zu einem TestFlight-Build
+(ohne Mac, über EAS) und listet, was für die öffentliche Veröffentlichung noch
+fehlt. `docs/DATENSCHUTZ.md` ist der Entwurf der Datenschutzerklärung, die als
+öffentliche URL Pflichtfeld im Store-Eintrag ist.
+
 ## Bekannte Grenzen
 
 - **Fotos sind lokal, solange kein Supabase konfiguriert ist.** Der Picker gibt
   eine Datei-URI zurück, die auf iOS und Android einen Neustart übersteht; im
   Browser ist es eine Blob-URL, die das nicht tut. Mit Supabase landen Bilder in
   Storage, mit Schreibrechten nur im eigenen Ordner.
-- **Keine Foto-Moderation.** Bei einer App mit Dating-Anteil ist das vor dem
-  Launch zu klären, nicht danach.
+- **Bild-Moderation ist nachgelagert und manuell.** Bilder erscheinen sofort und
+  werden danach über `moderation_queue` geprüft. Bei dieser Grösse ist das ein
+  echter Moderationsprozess; die Spalten für eine automatische Vorprüfung sind
+  vorhanden, der Klassifizierer fehlt noch.
 - Die Seed-Profile tragen **abstrakte Platzhalterbilder** (`assets/seed/`) statt
   erfundener Porträts — so ist das Karten-Layout mit und ohne Foto sichtbar,
   ohne Gesichter zu fingieren.
-- **Melden und Blockieren** existieren im Datenbankschema, aber noch nicht im UI.
+
 - **Kein Push.** Der Anfragen-Feed braucht es, um zu funktionieren.
 - **Die Koordinaten der Anlagen und Kreise** sind aus Adressen abgeleitet, nicht
   vermessen. Für Distanz-Matching genügt das, für Navigation nicht.
