@@ -4,6 +4,8 @@ Wöchentliche Suche nach einem rTMS-Gerät mit gutem Preis-Leistungs-Verhältnis
 Bevorzugt MagVenture (MagPro R20 / R30 / X100, MagVenture TMS Therapy), aber auch vergleichbare
 Geräte etablierter Hersteller (siehe unten).
 
+**Zustand:** neu, gebraucht, refurbished und Vorführgeräte – ausdrücklich auch Gebrauchtgeräte aller zugelassenen Hersteller.
+
 ## Zugelassene Hersteller / Modelle
 | Hersteller (Land) | Modelle | Standing / Hinweise |
 |---|---|---|
