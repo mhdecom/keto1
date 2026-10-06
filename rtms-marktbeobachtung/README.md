@@ -51,7 +51,8 @@ Magstim (magstim.com + EU-Distributoren), BrainsWay (brainsway.com, EU-Büro), D
 MAG & More (magandmore.com), Nexstim (nexstim.com), Neuronetics (neurostar.com)
 
 **Refurbisher / Händler (Versand nach Europa prüfen):**
-MedPro Lasers, Block Imaging, Soma Technology, weitere über DOTmed/Bimedis-Händlerprofile
+MedPro Lasers, Block Imaging, Soma Technology, Rock Bottom Lasers, relinkonline.com, medipment.pl, ELMIKO (PL),
+AYB Medica, mag2health.com, British Medical Auctions (UK), weitere über DOTmed/Bimedis-Händlerprofile
 
 **Weitere Quellen:** LinkedIn-Posts („MagPro for sale“, „TMS Gerät abzugeben“), Facebook-Gruppen für
 TMS-Kliniken, Universitäts-/Spitalausschreibungen von Gebrauchtgeräten.
