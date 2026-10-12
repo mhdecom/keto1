@@ -2,6 +2,37 @@
 
 <!-- Neueste Woche oben einfügen -->
 
+## KW 42 / 12.10.2026
+
+Alle Angaben aus Suchauszügen; Detailseiten (Bimedis, DOTmed, eBay) weiterhin per Netzwerk-Policy gesperrt → **ungeprüft**.
+
+| Hersteller | Modell | Bj. | Land | Preis | Zustand | Bewertung | Link | Status ggü. KW 41 |
+|---|---|---|---|---|---|---|---|---|
+| MagVenture | MagPro R20 PLUS (Auktion) | ? | ? | aktuelles Gebot 30 000 USD, ca. 7 Tage Restlaufzeit | ? | ★★★★ – günstigster Weg zu einer jungen R20; Standort/CE klären, vor Auktionsende anfragen | [DOTmed #5548856](https://www.dotmed.com/listing/neurology-general/magventure/magpror20/tms-machine/5548856) | weiterhin online |
+| MagVenture | MagPro R20+ (Theta-Burst) | – | ? | 39 000 USD | neu | ★★★★ – Neugerät, Standort/CE unklar | [DOTmed #5347927](https://pt.dotmed.com/listing/neurology-general/magventure/magpro-r20/tms-theta-burst-portable-stimulator/5347927) | unverändert |
+| MagVenture | MagPro R20 Plus | 2023 | Frankreich | ca. 36 000 € | gebraucht, exzellent | ★★★ (abgewertet) – Inserat laut Metadaten ca. 1 600 Tage alt → vermutlich veraltet | [Bimedis](https://bimedis.com/magventure-magpro-r20-m397209) | Aktualität fraglich |
+| MagVenture | MagPro R30 | 2022 | Italien | ca. 39 650 GBP | gebraucht, sehr gut | ★★★ – Status nicht bestätigbar | [Bimedis UK](https://uk.bimedis.com/a-item/transcranial-magnetic-stimulators-magventure-magpro-r30-2584770) | unbestätigt |
+| BrainsWay | Deep TMS 104 | 2024 | UK | ca. 100 000 USD | gebraucht | ★★ – zu teuer | [Bimedis](https://bimedis.com/a-item/tms-neuronavigation-systems-brainsway-deep-tms-104-system-2411948) | Preis jetzt bekannt |
+| BrainsWay | Deep TMS 104 + H1 | ? | USA (Miami) | 35 000 USD | as-is, Software am Login gesperrt | ★★ (abgewertet) – Lizenz-/Reset-Risiko, ausserhalb EU | [DOTmed #5875000](https://www.dotmed.com/listing/neurology-general/brainsway/deep-tms-system-104/brainsway-deep-tms-system-104-with-h1-coil/5875000) | Details bekannt |
+| MAG & More | PowerMAG Touch | 2021 | Deutschland | 25 000 (Währung unklar; Daten: ca. 29 500 USD) | quasi unbenutzt | – | [Bimedis DE](https://de.bimedis.com/a-item/transkranielle-magnetstimulatoren-mag-more-powermag-touch-2548000) | **verschwunden (archiviert/ausverkauft)** |
+| MagVenture | MagPro R20 | ? | Deutschland | 4 599 € | gebraucht | ⚠️ Betrugsverdacht | [Bimedis DE](https://de.bimedis.com/a-item/transkranielle-magnetstimulatoren-magventure-magpro-r20-1939919) | unverändert |
+| MagVenture | MagPro R30 | 2021 | Niederlande | ca. 5 400 USD | „like new“ | ⚠️ Betrugsverdacht | [Bimedis](https://bimedis.com/a-item/transcranial-magnetic-stimulators-magventure-magpro-r30-1971302) | unverändert |
+
+Referenzpreise (abgeschlossene Verkäufe, USA): Magstim Horizon Inspire 2024, kaum benutzt, Auktion geschlossen bei 45 000 USD
+([DOTmed](https://www.dotmed.com/auction/other/magstim/horizon-inspire/tms-machine/266343)); Magstim Horizon mit Stuhl + 3 Spulen
+auf eBay verkauft für 22 500 USD ([eBay](https://www.ebay.com/itm/336025852038)). Magstim-Horizon-Angebote auf Bimedis (USA) 61–85 k USD.
+Nicht relevant (nur Einzelpuls, kein rTMS): Magstim 200 / 200² (UK) und BiStim (DE), alle archiviert.
+
+Ohne Treffer: Kleinanzeigen (DE/AT/CH/NL/FR/IT), Suche in PL/NL/FI/SE, Praxis-/Klinikauflösungen, Deymed DuoMAG (EU), NeuroStar (EU),
+Nexstim, gebrauchte MagPro X100, MAG & More ausser dem (verschwundenen) PowerMAG Touch.
+
+**Fazit der Woche:** Keinen neuen guten Deal gefunden. Das PowerMAG Touch (Bestkandidat KW 41) ist weg.
+- **Bester Kandidat insgesamt / bester MagVenture-Kandidat:** MagPro R20 PLUS bei DOTmed, Auktion bei 30 000 USD (läuft ca. 7 Tage).
+  Alternativ die neue R20+ für 39 000 USD.
+- **Nächster Schritt:** Vor Auktionsende beim DOTmed-Verkäufer Standort, Spule, iTBS-Lizenz, CE-Konformität und Lizenzübertragung
+  erfragen. Beim französischen R20-Plus-Inserat nachfragen, ob es überhaupt noch aktuell ist.
+
+
 ## KW 41 / 06.10.2026 – Volllauf (alle Plattformen, alle Hersteller)
 
 Quelle: Routine-Sofortlauf (MagVenture-Teil; dessen Commits konnten wegen fehlender Push-Berechtigung
